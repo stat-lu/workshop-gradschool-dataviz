@@ -1,0 +1,92 @@
+---
+title: "Preparations"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: false
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  fig.align = "center",
+  fig.width = 5,
+  fig.height = 4,
+  dev = "png"
+)
+```
+
+Here are some instructions on how to setup your system properly for
+the workshop, which involves installing R, R Studio, some R packages,
+and making sure that everything is up-to-date.
+
+## R {-}
+
+Installing R is easy. Simply go to <https://cloud.r-project.org/> and download
+the appropriate version of R depending on your operating system:
+
+Linux
+: Click on *Download R for Linux*, pick a link based on your distribution
+  (such as `ubuntu/`), and then follow the instructions specific to that
+  distribution.
+
+Windows
+: Click on *Download R for Windows*, then *base*, and finally
+  *Download R X.X.X for Windows*.
+
+Mac (OS) X
+: Click on *Download R for (Mac) OS X*, then under "Latest release"
+  click on *R-X.X.X.pkg*.
+
+After this, you simply run the file you downloaded and follow the installation
+guide.
+
+## R Studio {-}
+
+After you're done installing R, it's time to install R Studio. Simply go to
+<https://rstudio.com/products/rstudio/download/#download> and pick a suitable
+version for R Studio depending on your operating system. Download and install
+it.
+
+## Tidyverse {-}
+
+During the workshop, we will be working mostly with packages that are
+part of **tidyverse**: a collection of packages that work seamlessly
+together. The package we will be using exclusively for our
+visualizations, **ggplot2**, is part of the tidyverse.
+
+To download and install all of the tidyverse packages, simply call
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+in R Studio (in the terminal tab). 
+
+It's possible that, when installing one or several of the packages,
+you will get a message saying (approximately)
+
+> There is a binary version available but the source version is later. Do
+  you want to install from sources which need compilation?
+
+In this case you can answer "no".
+
+## Update Your Packages {-}
+
+Finally, make sure that all your packages are up-to-date by
+calling 
+
+```{r, eval = FALSE}
+update.packages()
+```
+
+and update everything.
+
+Now you're good to go!
