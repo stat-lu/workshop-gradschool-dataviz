@@ -362,33 +362,34 @@ need to call <code>data(penguins)</code> to make this package available to us.</
 <code>head(penguins)</code> and <code>glimpse(penguins)</code>. Also read the documentation for the
 dataset (although in this case it is not very revealing) by using the <code>F1</code>
 shortcut in R Studio or by calling <code>?penguins</code>.</p>
+<div id="dotplot" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Dotplot</h2>
 <p>Plot a dotplot of the <code>body_mass_g</code> variable in the penguins data using the
 default settings by calling the following lines.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(body_mass_g)) <span class="sc">+</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dotplot</span>(<span class="at">binwidth =</span> <span class="dv">100</span>)</span></code></pre></div>
 <p>Now plot another dotplot using a binwidth of 1. What happens? Why is this setting
-not appropriate for this data?</p>
-<div id="histogram" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Histogram</h2>
+not appropriate for this data? Try some different values for <code>binwidth</code>.</p>
+</div>
+<div id="histogram" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Histogram</h2>
 <p>Continue by plotting the <code>body_mass_g</code> variable using a histogram with the default
-settings.</p>
+settings. Recall that the layer function for a histogram is called
+<code>geom_histogram()</code>. Use the same mappings as before.</p>
 <p>The default value is to use 30 bins for the histogram, which is not always
-optimal. This time we’ll use a custom sequence of break points for our
-histogram bins. Create a vector of break points at 2500, 3500, 4000, 5000, and
-7200 by using the <code>c()</code> function and use this vector inside the call to
-<code>geom_histogram()</code>.</p>
-<p><em>Hint: Look through the arguments section of the
-documentation for <code>geom_histogram()</code> to find out which
-argument to use when supplying the vector of break points. It’s not
-<code>bindwidth</code>!</em></p>
+optimal. Try changing this by settings the <code>bins</code> and <code>binwidth</code> arguments in
+<code>geom_histogram()</code> to some other value. Observe how the histogram changes.</p>
+<p>Next, we’ll use a custom sequence of break points for our
+histogram bins. Create your own vector of breakpoints using the
+<code>c()</code> function and use this vector inside the call to
+<code>geom_histogram()</code>. Supply this vector of break points to the <code>breaks</code>
+argument.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a vector of break points</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># call ggplot, using your vector of break points</span></span></code></pre></div>
-<p>Can you figure out, approximately, how many observations there are in the
-5000–72000 bin?</p>
-<div id="histogram-bin-rules-of-thumb" class="section level3" number="2.1.1">
-<h3><span class="header-section-number">2.1.1</span> Histogram Bin Rules-of-Thumb</h3>
+<div id="histogram-bin-rules-of-thumb" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Histogram Bin Rules-of-Thumb</h3>
 <p>There have been several attempts to produce rules of thumb for selecting
 settings for either the number of bins or the bin width. Although you shouldn’t
 be using these blindly, they do take away a bit of the guesswork in selecting
@@ -397,26 +398,32 @@ bins and removes some of the possibility for bias. Go to
 on the <strong>Rice Rule</strong>.</p>
 <p>Compute the optimal number of bins for the Penguins data
 set according to the Rice Rule and try it out on the <code>body_mass_g</code> variable.</p>
-<p><em>Hint 1: Use <code>drop_na()</code> to drop all observation that have missing values
-on <code>body_mass_g()</code> and then count the number of observations using <code>nrow()</code>.</em></p>
-<p><em>Hint 2: Note that <span class="math inline">\(\sqrt[^3]{n} = n^\frac{1}{3}\)</span>.</em></p>
-<p>Figure out what the optimal number of bins is with this rule, and then
-use this in your histogram. What do you think of the result?</p>
+<p>First, however, we compute the number of observations, taking care to drop
+missing values.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(penguins, body_mass_g) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div>
+<p>Now use <code>n</code> to figure out what the optimal number of bins is according to this
+rule, and then use this in your histogram. What do you think of the result?</p>
+<p><em>Hint: Note that <span class="math inline">\(\sqrt[^3]{n} = n^\frac{1}{3}\)</span>.</em></p>
 </div>
 </div>
-<div id="box-plots" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Box Plots</h2>
+<div id="box-plots" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Box Plots</h2>
 <p>Now plot a box plot of the <code>body_mass_g</code> variable in the penguins data.</p>
-<p>Try to figure out how many outliers there are in the plot. What is the median?</p>
+<p>Try to figure out how many outliers there are in the plot, what the
+median is, and the quartiles. What do you think of the boxplot compared
+to the histogram?</p>
 </div>
-<div id="density-plots" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Density Plots</h2>
+<div id="density-plots" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Density Plots</h2>
 <p>Let’s try to use a density plot instead. First plot a density plot of body mass
-in the penguins data using the default settings.</p>
-<p>Then, change the kernel for the density plot to a rectangular kernel.</p>
+in the penguins data using the default settings. Then try changing the
+<code>bw</code> argument to something different (or use <code>adjust</code>, which acts as a
+multiplier on the default value).</p>
+<p>Now change the kernel for the density plot to a rectangular kernel,
+using <code>kernel = &quot;rectangular&quot;</code> inside the call to <code>geom_density()</code>.</p>
 <p>What happens to the plot after you’ve switched the kernel to the rectangular
-one?</p>
-<p>If you want to, try to play around with a few other kernels.</p>
+one? Do you understand why the result looks different?</p>
 </div>
 </div>
 <div id="patching-plots" class="section level1" number="3">
@@ -424,20 +431,19 @@ one?</p>
 <p>The <strong>patchwork</strong> package is useful for combining separate ggplots into
 one visualization. It’s very easy to use yet is still flexible enough
 to be able to generate a wide variety of layouts. First load the package.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
 <p>Now create three box plots, one for each of bill depth, bill length, and
 flipper length for the penguins data set. Use the patchwork package to
 combine the three box plots into one layout.</p>
 <p>The easiest way to combine plots together with patchwork is to simply
-add them together using <code>+</code>.</p>
-<p>Try to run the following code.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_depth_mm))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_length_mm))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> flipper_length_mm))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3</span></code></pre></div>
+add them together using <code>+</code>. Try to run the following code.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_depth_mm))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_length_mm))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> flipper_length_mm))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3</span></code></pre></div>
 <p>Instead of <code>+</code>, you can use <code>|</code> too. In addition to these, you can
 also use <code>/</code> and use parenthesis to group plots together. Try out some of
 these on the plots above.</p>

@@ -52,6 +52,8 @@ Start by familiarizing yourself with the dataset. A good first step is to call
 dataset (although in this case it is not very revealing) by using the `F1`
 shortcut in R Studio or by calling `?penguins`.
 
+## Dotplot
+
 Plot a dotplot of the `body_mass_g` variable in the penguins data using the
 default settings by calling the following lines.
 
@@ -61,12 +63,13 @@ ggplot(penguins, aes(body_mass_g)) +
 ```
 
 Now plot another dotplot using a binwidth of 1. What happens? Why is this setting
-not appropriate for this data?
+not appropriate for this data? Try some different values for `binwidth`. 
 
 ## Histogram
 
 Continue by plotting the `body_mass_g` variable using a histogram with the default
-settings.
+settings. Recall that the layer function for a histogram is called
+`geom_histogram()`. Use the same mappings as before.
 
 ```{r, include = FALSE}
 ggplot(penguins, aes(body_mass_g)) +
@@ -74,15 +77,14 @@ ggplot(penguins, aes(body_mass_g)) +
 ```
 
 The default value is to use 30 bins for the histogram, which is not always
-optimal. This time we'll use a custom sequence of break points for our
-histogram bins. Create a vector of break points at 2500, 3500, 4000, 5000, and
-7200 by using the `c()` function and use this vector inside the call to
-`geom_histogram()`.
+optimal. Try changing this by settings the `bins` and `binwidth` arguments in 
+`geom_histogram()` to some other value. Observe how the histogram changes.
 
-*Hint: Look through the arguments section of the
-documentation for `geom_histogram()` to find out which
-argument to use when supplying the vector of break points. It's not
-`bindwidth`!*
+Next, we'll use a custom sequence of break points for our
+histogram bins. Create your own vector of breakpoints using the
+`c()` function and use this vector inside the call to
+`geom_histogram()`. Supply this vector of break points to the `breaks`
+argument.
 
 ```{r, include = FALSE}
 breaks <- c(2500, 3500, 4000, 5000, 7200)
@@ -98,9 +100,6 @@ breaks <- c(NA)
 # call ggplot, using your vector of break points
 ```
 
-Can you figure out, approximately, how many observations there are in the
-5000--72000 bin?
-
 ### Histogram Bin Rules-of-Thumb
 
 There have been several attempts to produce rules of thumb for selecting
@@ -113,20 +112,22 @@ on the **Rice Rule**.
 Compute the optimal number of bins for the Penguins data 
 set according to the Rice Rule and try it out on the `body_mass_g` variable.
 
-*Hint 1: Use `drop_na()` to drop all observation that have missing values
-on `body_mass_g()` and then count the number of observations using `nrow()`.*
+First, however, we compute the number of observations, taking care to drop
+missing values. 
 
-*Hint 2: Note that $\sqrt[^3]{n} = n^\frac{1}{3}$.*
-
-```{r, include = FALSE}
+```{r}
 n <- drop_na(penguins, body_mass_g) %>%
   nrow()
-
-k <- 2 * n^(1/3)
 ```
 
-Figure out what the optimal number of bins is with this rule, and then
-use this in your histogram. What do you think of the result?
+Now use `n` to figure out what the optimal number of bins is according to this
+rule, and then use this in your histogram. What do you think of the result?
+
+*Hint: Note that $\sqrt[^3]{n} = n^\frac{1}{3}$.*
+
+```{r, include = FALSE}
+k <- 2 * n^(1/3)
+```
 
 ```{r include = FALSE}
 ggplot(penguins, aes(body_mass_g)) +
@@ -142,24 +143,27 @@ ggplot(penguins, aes(body_mass_g)) +
   geom_boxplot()
 ```
 
-Try to figure out how many outliers there are in the plot. What is the median?
+Try to figure out how many outliers there are in the plot, what the
+median is, and the quartiles. What do you think of the boxplot compared
+to the histogram?
 
 ## Density Plots
 
 Let's try to use a density plot instead. First plot a density plot of body mass
-in the penguins data using the default settings.
+in the penguins data using the default settings. Then try changing the
+`bw` argument to something different (or use `adjust`, which acts as a
+multiplier on the default value).
+
+Now change the kernel for the density plot to a rectangular kernel,
+using `kernel = "rectangular"` inside the call to `geom_density()`.
 
 ```{r, include = FALSE}
 ggplot(penguins, aes(body_mass_g)) +
   geom_density(kernel = "rectangular")
 ```
 
-Then, change the kernel for the density plot to a rectangular kernel.
-
 What happens to the plot after you've switched the kernel to the rectangular
-one?
-
-If you want to, try to play around with a few other kernels.
+one? Do you understand why the result looks different?
 
 # Patching Plots
 
@@ -176,9 +180,7 @@ flipper length for the penguins data set. Use the patchwork package to
 combine the three box plots into one layout.
 
 The easiest way to combine plots together with patchwork is to simply
-add them together using `+`.
-
-Try to run the following code.
+add them together using `+`. Try to run the following code.
 
 ```{r eval = FALSE}
 p <- ggplot(penguins)
