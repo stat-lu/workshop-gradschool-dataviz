@@ -57,6 +57,15 @@ if (!interactive()) {
 options(digits = 3)
 ```
 
+## Who am I?
+
+- Final-year PhD student at the [Department of Statistics](https://stat-lu.se).
+- Instructor for (and designer of) [STAE04: Data Visualisation](https://stat.lu.se/en/education/courses/stae04_data_visualisation)
+- Personal website: [larssonjohan.com](https://larssonjohan.com)
+- Twitter: [@joh_larsson](https://twitter.com/joh_larsson)
+
+---
+
 class: section-title
 
 # Why Visualize?

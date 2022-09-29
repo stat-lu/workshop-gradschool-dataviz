@@ -33,7 +33,11 @@ ggplot2 is part of the **tidyverse** so you can simply call
 library(tidyverse)
 ```
 
-to load ggplot2.
+to load ggplot2. We'll be using other packages from **tidyverse** 
+frequently, so this is a good idea. 
+
+Notice that some of the base R functions have been overwritten by functions
+in the tidyverse packages.
 
 # `ggplot()`
 
@@ -76,7 +80,7 @@ the data.
 head(mtcars)
 ```
 
-The second argument of `heads()` decides how many rows to show. Modify this
+The second argument of `head()` decides how many rows to show. Modify this
 value to show the first 10 cars of the dataset.
 
 `glimpse()` is very useful when you have more variables (since it is more
@@ -88,21 +92,20 @@ a table along with the first values of each variable.
 The `mapping` argument should be supplied with a call to the `aes()` function
 that lists the mappings between variables in your data and aesthetics of the
 plot. Which aesthetics you choose to map to depends on what geoms you intend to
-use. But for now, let's assume that we want to map engine displacement (`disp`) to the x
-axis, and fuel consumption (`mpg`) to the y axis. To do so, we simply use
-`aes(x = disp, y = mpg)` as the input to the `mapping` argument. Because the
-first two arguments of `aes()` are `x` and `y`, we can do without calling them
-explicitly.
+use. But for now, let's assume that we want to map engine displacement (`disp`)
+to the x axis, and fuel consumption (`mpg`) to the y axis. To do so, we simply
+use `aes(x = disp, y = mpg)` as the input to the `mapping` argument. Because
+the first two arguments of `aes()` are `x` and `y`, we can do without calling
+them explicitly.
 
-Let's put this together:
+Let's put this together! Run the following code.
 
-```{r blank-canvas}
+```{r blank-canvas, eval = FALSE}
 ggplot(mtcars, aes(disp, mpg))
 ```
 
 Why does this result in a blank canvas? After all, we did tell ggplot to map
 engine displacement to the x axis and fuel consumption to the y axis.
-
 The answer is that we still haven't told ggplot2 which layers we want to use.
 
 # Layers
@@ -118,7 +121,7 @@ predefined defaults to provide the other components of the layer.
 To provide a layer with the point geom to the plot, you simply need to call
 the following lines.
 
-```{r cars-plot}
+```{r cars-plot, eval = FALSE}
 ggplot(mtcars, aes(disp, mpg)) +
   geom_point()
 ```
@@ -137,18 +140,18 @@ Alternatively, you can define the mappings in the `geom_point()` function
 directly, which also has a `mapping` argument. Practically speaking, the
 lines above turn out to be equivalent to those below.
 
-```{r cars-plot-aes}
+```{r cars-plot-aes, eval = FALSE}
 ggplot(mtcars) +
   geom_point(aes(disp, mpg))
 ```
 
-This will come in handy for us later on in the course.
+This will come in handy for us later on in the workshop.
 
-The layer functions, such as `geom_point()`, also have its own `data` argument,
-which means that we can define the data directly in the `geom_point()` function
-too:
+The layer functions, such as `geom_point()`, also have their own `data`
+argument, which means that we can define the data directly in the
+`geom_point()` function too:
 
-```{r cars-plot-data}
+```{r cars-plot-data, eval = FALSE}
 ggplot() +
   geom_point(aes(disp, mpg), data = mtcars)
 ```
@@ -161,7 +164,7 @@ set (nor the aesthetics mappings defined in the `geom_point()`) call.
 Now try to switch geom for your plot, for instance
 by replacing `geom_point()` with `geom_line()`.
 
-Now try to add a line geom to the plot as well, using `geom_line()`.
+Next, try to add a line geom to the plot as well, using `geom_line()`.
 Does this make sense for this plot?
 
 ```{r eval = FALSE, echo = FALSE}
@@ -198,17 +201,19 @@ simply specify that aesthetic in the call to the geom you would like to change.
 Let's change the color of the points to navy blue, increase the size, and change
 shape. Doing so is a breeze with ggplot2:
 
-```{r cars-navy}
+```{r cars-navy, eval = FALSE}
 ggplot(mtcars, aes(disp, mpg)) +
   geom_point(
-    colour = "navy",
+    color = "navy",
     size   = 1.8,
     shape  = 4
   )
 ```
 
-Take some time to play around with the various aesthetics. Switch geom and try
+Take some time to play around with the various aesthetics. Switch geom or try
 to flip the axes. Can you figure out what the `stroke` aesthetic does?
+Try putting the specification inside the `aes()` function instead.
+Why doesn't this work?
 
 It might be worth noting that some of the aesthetics used here have synonyms
 that you will likely come across every now and then, for instance `cex = size`
@@ -230,7 +235,7 @@ it simply returns its input as output. A natural default geom for the
 identity transformation is a point geom, so if we use
 `stat_identity()` like so:
 
-```{r cars-stat}
+```{r cars-stat, eval = FALSE}
 ggplot(mtcars, aes(disp, mpg)) +
   stat_identity()
 ```
@@ -238,18 +243,36 @@ ggplot(mtcars, aes(disp, mpg)) +
 We get the same scatter plot as before.
 
 The example above is not really of much practical use. But `stat_*()` functions
-occasionally do come in handy. They are, for instance, natural to consider
-when your goal from the outset is to visualize the result of
-a statistical transformation (other than the identity function), such
-as medians of some
-distribution, for instance. In this example, we've used 
-the `stat_summary()` function to compute medians of engine
-displacement across all unique values of numbers of cylinders.
+occasionally do come in handy. They are, for instance, natural to consider when
+your goal from the outset is to visualize the result of a statistical
+transformation (other than the identity function), such as medians of some
+distribution, for instance. In this example, we've used the `stat_summary()`
+function to compute medians of engine displacement across all unique values of
+numbers of cylinders.
 
 ```{r}
 ggplot(mtcars, aes(cyl, disp)) +
   stat_summary(fun = median, geom = "line") +
   stat_summary(fun = median, geom = "point")
+```
+
+Try to adapt the code below with your own choice of function (and
+maybe even geom too). You could even write your own function first,
+such as in the following example.
+
+```{r}
+first_quartile <- function(x) {
+  quantile(x, 0.25)
+}
+
+third_quartile <- function(x) {
+  quantile(x, 0.75)
+}
+
+ggplot(mtcars, aes(cyl, disp)) +
+  stat_summary(fun = first_quartile, geom = "line") +
+  stat_summary(fun = median, geom = "point") +
+  stat_summary(fun = third_quartile, geom = "line") 
 ```
 
 # Limits
@@ -264,11 +287,11 @@ on the axes (such as zero) or just want to make room for annotation.
 Here we've taken the previous plot and changed the limits to include
 0 on the y axis. 
 
-```{r}
+```{r eval = FALSE}
 ggplot(mtcars, aes(cyl, disp)) +
   stat_summary(fun = median, geom = "line") +
   stat_summary(fun = median, geom = "point") +
-  ylim(0, 300)
+  lims(y = c(0, 300))
 ```
 
 # Scales (and Guides)
@@ -290,17 +313,18 @@ ggplot(mtcars, aes(disp, mpg)) +
   geom_point()
 ```
 
-It is actually equivalent to this one:
+And now run the code below.
 
-```{r}
+
+```{r eval = FALSE}
 ggplot(mtcars, aes(disp, mpg)) +
   geom_point() +
   scale_x_continuous() +
   scale_y_continuous()
 ```
 
-This makes sense. Speed and distance are continuous variables, so they
-should have continuous scales.
+It is actually equivalent to previous plot. The default makes sense. Speed and
+distance are continuous variables, so they should have continuous scales.
 
 `scale_*()` functions can be used to modify the scales in many ways. We can,
 for instance, reverse the direction of the scale or use a logarithmic
@@ -313,8 +337,9 @@ for instance, we have two guides: the two axes, which include all the tick
 marks and numbers.
 
 Here's an example where we've gone a bit crazy with these settings.
+Try to run it and see for yourself.
 
-```{r}
+```{r eval = FALSE}
 ggplot(mtcars, aes(disp, mpg)) +
   geom_point() +
   scale_x_reverse(
@@ -329,6 +354,8 @@ Try typing `scale_` in the Console in R Studio and look at the long list
 of completions. (You may need to hit `<Tab>`.) Scroll through it and look
 at the multitude of different scale functions available.
 
+Experiment with the different scale settings.
+
 # Guides
 
 For other guides, such as legends for sizes, shapes, and color mappings,
@@ -340,7 +367,7 @@ Most of the time, the only reason you'll have to invoke the `guides()` function
 will actually be to *remove* guides that are redundant. To do so, just
 set the respective guide to `"none"`, like this:
 
-```{r}
+```{r eval = FALSE}
 ggplot(cars, aes(speed, dist)) +
   geom_point() +
   guides(x = "none")
@@ -351,15 +378,11 @@ this page: <https://ggplot2.tidyverse.org/reference/guides.html>.
 
 # Labeling Guides
 
-How you label your guides matters a lot and it's probably the thing in the
-course that we nitpick on the most in (save maybe for improper figure sizing
-and non-descriptive figure captions). 
+Label your guides well! It's fortunately easy to do in ggplot2. Just use the
+`labs()` function. The basic recipe is `labs(<guide> = <name>)`. So, to label
+the guides in the `mtcars` example, for instance, you would just do:
 
-It's fortunately very easy to do in ggplot2. Just use the `labs()` function.
-The basic recipe is `labs(<guide> = <name>)`. So, to label the guides
-in the `mtcars` example, for instance, you would just do:
-
-```{r}
+```{r eval = FALSE}
 ggplot(mtcars, aes(disp, mpg, color = factor(cyl))) +
   geom_point() + 
   labs(
@@ -377,7 +400,6 @@ to waste space on a long title label for the legend.
 Just like with limits, there are shortcuts for the x and y coordinates here
 too: `xlab()` and `ylab()`.
 
-
 # Changing the Appearance of Your Plots
 
 The appearance of ggplots can be varied in a great many ways and the interface
@@ -391,7 +413,7 @@ legends will always be placed on the right of the plot. But sometimes
 you need that space for the canvas, perhaps just to alleviate issues with
 overlap. It's very easy to do so:
 
-```{r}
+```{r eval = FALSE}
 ggplot(mtcars, aes(disp, mpg, color = factor(cyl))) +
   geom_point() + 
   theme(legend.position = "bottom") # top, left, right, bottom
@@ -405,11 +427,13 @@ coordinates of the canvas. Placing legends inside the canvas well typically
 comes down to trial-and-error and will depend on the size of the plot in the
 output.
 
-```{r}
+```{r eval = FALSE}
 ggplot(mtcars, aes(disp, mpg, color = factor(cyl))) +
   geom_point() + 
   theme(legend.position = c(0.8, 0.8))
 ```
+
+Try to change `legend.position` to move the plot around.
 
 The full list of options for the `theme()` function is available at
 <https://ggplot2.tidyverse.org/reference/theme.html>. 
@@ -419,7 +443,7 @@ The full list of options for the `theme()` function is available at
 If you want to modify the appearance of all of your plots, the simplest way of
 doing so is to switch theme for your plots. There are many built-in themes in
 ggplot2[^2]. The default theme, which you've seen exemplified several times by
-now, is `theme_grey()` and for most of the plots in this course, we will stick
+now, is `theme_grey()` and for most of the plots in this workshop, we will stick
 to that.
 
 Changing the theme for your plots can be done on a plot-by-plot basis, by
@@ -442,10 +466,13 @@ ggplot(mtcars, aes(disp, mpg, color = factor(cyl))) +
   geom_point() 
 ```
 
+Have a look at [this page](https://ggplot2.tidyverse.org/reference/ggtheme.html),
+which lists all the complete themes that are included in ggplot2. Try
+switching themes to some of the default ones and watch the results.
+
 There are other packages that provide additional themes for ggplot2 too. If you
-have time while waiting for the others to finish, install
-[ggthemes](https://cran.r-project.org/package=ggthemes) and play around with
-some of the themes in that packages.
+have time, install [ggthemes](https://cran.r-project.org/package=ggthemes)
+and play around with some of the themes in that package.
 
 [^2]: For a full list, see
      <https://ggplot2.tidyverse.org/reference/ggtheme.html>.
