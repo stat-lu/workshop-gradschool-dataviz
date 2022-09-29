@@ -41,59 +41,65 @@ install.packages(c("tsibble", "MASS"))
 
 # Swiss Demographics
 
-```{r, include = FALSE}
-ggplot(swiss, aes(Catholic, Fertility)) +
-  geom_point()
-```
 
 Let's take a look at the `swiss` data set. First, as always, browse the
 documentation for the data set to get a sense of what the data concerns.
 
+Let's start with a simple scatter plot of the proportion of Catholics
+and fertility for each province.
+
+```{r, eval = FALSE}
+ggplot(swiss, aes(Catholic, Fertility)) +
+  geom_point()
+```
+
 Try to explore some of the relationships in the data, focusing on
 the relationship between fertility and the other variables in the data set.
-For which relationsips does the correlation appear to be strongest?
-Try to describe the relationships you see.
+For which relationships does the correlation appear to be strongest?
+Try to describe the relationships you see. Are they linear, quadratic, or
+something else?
 
 # Miles per Gallon
 
-Use the `mpg` data set to plot a scatter plot of number of cylinders against
-highway miles per gallon.
+Use the `mpg` data set to plot a scatter plot of number of cylinders (`cyl`)
+against highway miles per gallon (`hwy`). 
 
 ```{r, include = FALSE}
 ggplot(mpg, aes(cyl, hwy)) +
   geom_point()
 ```
 
-There is a lot of overlap in the plot, which we should solve using jittering. In
-which direction should the points be jittered (provided `cyl` is on the x axis
-and `hwy` on the y axis)?
+There is a lot of overlap in the plot, which we should solve using jittering. 
+Try adding jittering by specifying `position = position_jitter()` in
+`geom_point()`. Set `height` and `width` in `position_jitter()` to some values.
+Consider whether you want to jitter in both directions, or only in one of
+them---which one in that case?
 
 ## Opacity 
 
 Again plot a scatter plot of the number of cylinders against highway miles per
-gallon using the `mpg` data set but this time use opacity to alleviate the effect
-of overlap.
+gallon using the `mpg` data set but this time use opacity (`alpha`) to
+alleviate the effect of overlap.
 
 ```{r, include = FALSE}
 ggplot(mpg, aes(cyl, hwy)) +
   geom_point(alpha = 0.2)
 ```
 
-What happens if you set the opacity level (`alpha`) to 2?
-
-- it works and is equivalent to setting it to 1 [correct]
-- an error is thrown since only values between 0 and 1 are allowed
-- a darker color is used (unless the color is black, in which case nothing
-  happens)
-- the default opacity if halved
+Try different combinations of `alpha` and jittering to settle on
+a plot you find effective and easy to read.
 
 ## Box Plots
 
 Make another plot of cylinders against highway miles per gallons, but this time
-using a box plot instead. To do so, you need to first convert the cylinder
+use a box plot instead. To do so, you need to first convert the cylinder
 variable into a factor, and then construct the plot. (You can also do this
 directly in the ggplot2 call, but then you need to modify the labels
 accordingly.)
+
+```{r}
+mpg2 <- mutate(mpg, cyl = as_factor(cyl))
+```
 
 ```{r include = FALSE}
 mutate(mpg, cyl = as_factor(cyl)) %>%
@@ -122,9 +128,9 @@ Are there any seasonal trends in the plot?
 # Mammals
 
 Next, we'll look at some data on body and brain size of mammals; this time we'll
-use the `mammals` data set from the **MASS** package. We make the
-data set available by using the `data()` function in the following manner and
-then tidy it up by turning the rownames into its own column.
+use the `mammals` data set from the **MASS** package. We make the data set
+available by using the `data()` function in the following manner and then tidy
+it up by turning the row names into its own column.
 
 ```{r}
 data("mammals", package = "MASS")
@@ -146,7 +152,8 @@ ggplot(mammals_tidy, aes(body, brain)) +
 ```
 
 As you can see, this plot does not really work too well. Try to fix this
-problem by using different scales.
+problem by using different scales. Try to use `scale_x/y_log10()` and
+`scale_x/y_sqrt()` (square root).
 
 ```{r eval = FALSE, echo = FALSE}
 ggplot(mammals, aes(body, brain)) +
@@ -155,8 +162,24 @@ ggplot(mammals, aes(body, brain)) +
   scale_y_log10()
 ```
 
-Is there any downside to using non-linear scales?
+Are there any downsides to using non-linear scales?
 
-If you have time left over, check out `geom_text()` and see if you
-can add a text layer for the plot of mammals by mapping to the `mammal`
-variable.
+## Direct Transformations
+
+Instead of using scales, it's possible to use transform the data instead.
+To, for instance, apply a log transformation to brain size and body size, we 
+could do the following:
+
+```{r mammals_direct, eval = FALSE}
+ggplot(mammals_tidy, aes(log10(body), log10(brain))) +
+  geom_point()
+```
+
+What is the difference when doing this compared to using the scale
+functions? Which do you prefer (and why)?
+
+If you have time left over, check out the documentation for
+`scale_x/y_continuous()` at
+<https://ggplot2.tidyverse.org/reference/scale_continuous.html> and try
+out some other transformations by changing the value of the `trans` argument.
+See the documentation for possible values. (There are a lot of them!)

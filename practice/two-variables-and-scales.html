@@ -354,39 +354,41 @@ div.tocify {
 <h1><span class="header-section-number">2</span> Swiss Demographics</h1>
 <p>Let’s take a look at the <code>swiss</code> data set. First, as always, browse the
 documentation for the data set to get a sense of what the data concerns.</p>
+<p>Let’s start with a simple scatter plot of the proportion of Catholics
+and fertility for each province.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swiss, <span class="fu">aes</span>(Catholic, Fertility)) <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>Try to explore some of the relationships in the data, focusing on
 the relationship between fertility and the other variables in the data set.
-For which relationsips does the correlation appear to be strongest?
-Try to describe the relationships you see.</p>
+For which relationships does the correlation appear to be strongest?
+Try to describe the relationships you see. Are they linear, quadratic, or
+something else?</p>
 </div>
 <div id="miles-per-gallon" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Miles per Gallon</h1>
-<p>Use the <code>mpg</code> data set to plot a scatter plot of number of cylinders against
-highway miles per gallon.</p>
-<p>There is a lot of overlap in the plot, which we should solve using jittering. In
-which direction should the points be jittered (provided <code>cyl</code> is on the x axis
-and <code>hwy</code> on the y axis)?</p>
+<p>Use the <code>mpg</code> data set to plot a scatter plot of number of cylinders (<code>cyl</code>)
+against highway miles per gallon (<code>hwy</code>).</p>
+<p>There is a lot of overlap in the plot, which we should solve using jittering.
+Try adding jittering by specifying <code>position = position_jitter()</code> in
+<code>geom_point()</code>. Set <code>height</code> and <code>width</code> in <code>position_jitter()</code> to some values.
+Consider whether you want to jitter in both directions, or only in one of
+them—which one in that case?</p>
 <div id="opacity" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Opacity</h2>
 <p>Again plot a scatter plot of the number of cylinders against highway miles per
-gallon using the <code>mpg</code> data set but this time use opacity to alleviate the effect
-of overlap.</p>
-<p>What happens if you set the opacity level (<code>alpha</code>) to 2?</p>
-<ul>
-<li>it works and is equivalent to setting it to 1 [correct]</li>
-<li>an error is thrown since only values between 0 and 1 are allowed</li>
-<li>a darker color is used (unless the color is black, in which case nothing
-happens)</li>
-<li>the default opacity if halved</li>
-</ul>
+gallon using the <code>mpg</code> data set but this time use opacity (<code>alpha</code>) to
+alleviate the effect of overlap.</p>
+<p>Try different combinations of <code>alpha</code> and jittering to settle on
+a plot you find effective and easy to read.</p>
 </div>
 <div id="box-plots" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Box Plots</h2>
 <p>Make another plot of cylinders against highway miles per gallons, but this time
-using a box plot instead. To do so, you need to first convert the cylinder
+use a box plot instead. To do so, you need to first convert the cylinder
 variable into a factor, and then construct the plot. (You can also do this
 directly in the ggplot2 call, but then you need to modify the labels
 accordingly.)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mpg2 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(mpg, <span class="at">cyl =</span> <span class="fu">as_factor</span>(cyl))</span></code></pre></div>
 <p>What do you think about this plot compared to the scatter plot?</p>
 </div>
 </div>
@@ -394,10 +396,10 @@ accordingly.)</p>
 <h1><span class="header-section-number">4</span> Flow of River Nile</h1>
 <p>Run the following code to create a ggplot2-compatible data set out of the Nile
 time series.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nile <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Nile) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> index, <span class="at">flow =</span> value)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>nile <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Nile) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> index, <span class="at">flow =</span> value)</span></code></pre></div>
 <p>Read the documentation for the Nile data set and then construct
 a plot to investigate the flow of the river across time.
 Are there any seasonal trends in the plot?</p>
@@ -405,26 +407,39 @@ Are there any seasonal trends in the plot?</p>
 <div id="mammals" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Mammals</h1>
 <p>Next, we’ll look at some data on body and brain size of mammals; this time we’ll
-use the <code>mammals</code> data set from the <strong>MASS</strong> package. We make the
-data set available by using the <code>data()</code> function in the following manner and
-then tidy it up by turning the rownames into its own column.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;mammals&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MASS&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># turn the rownames into a real variable</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mammals_tidy <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(mammals, <span class="st">&quot;mammal&quot;</span>)</span></code></pre></div>
+use the <code>mammals</code> data set from the <strong>MASS</strong> package. We make the data set
+available by using the <code>data()</code> function in the following manner and then tidy
+it up by turning the row names into its own column.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;mammals&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MASS&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># turn the rownames into a real variable</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mammals_tidy <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(mammals, <span class="st">&quot;mammal&quot;</span>)</span></code></pre></div>
 <p><em>The reason that we are avoiding just calling <code>library(MASS)</code> here is that
 <strong>MASS</strong> contains some functions that cause conflicts with functions from
 <strong>tidyverse</strong>.</em></p>
 <p>Next, plot a standard scatter plot of body size against brain size using the
 code below.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mammals_tidy, <span class="fu">aes</span>(body, brain)) <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mammals_tidy, <span class="fu">aes</span>(body, brain)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>As you can see, this plot does not really work too well. Try to fix this
-problem by using different scales.</p>
-<p>Is there any downside to using non-linear scales?</p>
-<p>If you have time left over, check out <code>geom_text()</code> and see if you
-can add a text layer for the plot of mammals by mapping to the <code>mammal</code>
-variable.</p>
+problem by using different scales. Try to use <code>scale_x/y_log10()</code> and
+<code>scale_x/y_sqrt()</code> (square root).</p>
+<p>Are there any downsides to using non-linear scales?</p>
+<div id="direct-transformations" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Direct Transformations</h2>
+<p>Instead of using scales, it’s possible to use transform the data instead.
+To, for instance, apply a log transformation to brain size and body size, we
+could do the following:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mammals_tidy, <span class="fu">aes</span>(<span class="fu">log10</span>(body), <span class="fu">log10</span>(brain))) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p>What is the difference when doing this compared to using the scale
+functions? Which do you prefer (and why)?</p>
+<p>If you have time left over, check out the documentation for
+<code>scale_x/y_continuous()</code> at
+<a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="uri">https://ggplot2.tidyverse.org/reference/scale_continuous.html</a> and try
+out some other transformations by changing the value of the <code>trans</code> argument.
+See the documentation for possible values. (There are a lot of them!)</p>
+</div>
 </div>
 
 
