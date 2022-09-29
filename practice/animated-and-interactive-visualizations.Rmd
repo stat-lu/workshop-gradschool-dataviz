@@ -116,7 +116,7 @@ for instructions for any given distribution.
 # Gapminder
 
 Do you remember the animated plots we produced in the introductory
-presentation course based on the Gapminder Hans Rosling
+presentation workshop based on the Gapminder Hans Rosling
 animated visualization?
 
 ```{r rosling, echo = FALSE, out.extra='style="border: none;"', out.width="100%"}
