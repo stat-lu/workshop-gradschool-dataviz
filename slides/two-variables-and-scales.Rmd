@@ -1,0 +1,434 @@
+---
+title: "Two Variables and Scales"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson (Department of Statistics)"
+institute: "Graduate School at the Faculty of Social Sciences"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  xaringan::moon_reader:
+    css: [default, "assets/styles.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      titleSlideClass: [middle, center]
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE,
+  dev = "png",
+  fig.width = 5,
+  fig.height = 4.3,
+  fig.align = "center",
+  fig.retina = 3,
+  dev.args = list(pointsize = 16),
+  crop = TRUE
+)
+
+library(tidyverse)
+library(tactile)
+library(lattice)
+library(latticeExtra)
+library(kableExtra)
+
+kable <- function(x, ...) {
+  knitr::kable(x, escape = FALSE, linesep = "", booktabs = TRUE)
+}
+
+library(RefManageR)
+BibOptions(
+  check.entries = FALSE,
+  bib.style = "authoryear",
+  style = "markdown",
+  dashed = TRUE
+)
+bib <- ReadBib("assets/references.bib")
+
+if (!interactive()) {
+  theme_set(theme_grey(base_size = 16))
+}
+
+xaringanExtra::use_search(show_icon = TRUE)
+
+options(digits = 3)
+```
+
+## Associations
+
+.pull-left[
+How does $x$ relate to $y$?
+
+Straightforward when both variables are continuous
+
+Scatter plots are the bread and butter of visualizations of
+two continuous variables.
+
+```{r, eval = FALSE}
+library(tidyverse)
+ggplot(swiss, 
+       aes(Examination, 
+           Fertility)) +
+  geom_point() #<<
+```
+
+]
+
+.pull-right[
+```{r, fig.cap = "Fertility and % of draftees receiving highest mark on army examination in French-speaking provinces in Switzerland.", echo = FALSE}
+library(tidyverse)
+ggplot(swiss, 
+       aes(Examination, 
+           Fertility)) +
+  geom_point()
+```
+]
+
+---
+
+## Patterns
+
+Understanding patterns is key to being able to visualize data effectively.
+
+```{r, fig.width = 8, fig.height = 6.5, echo = FALSE}
+set.seed(1453)
+
+n <- 100
+x <- runif(n, 1, 6)
+
+y_clust <- double(n)
+y_clust[x <= 3] <- rnorm(n, -4)
+y_clust[x > 3] <- rnorm(n, 4)
+
+d <- tibble(
+  x = x,
+  noise = runif(n),
+  linear = x + rnorm(n, 0, 1),
+  nonlinear = 2^x + 0.5*x*rnorm(n, 0, 5),
+  clusters = y_clust
+)
+
+d_long <- pivot_longer(d, -x) %>%
+  mutate(name = fct_relevel(name, "noise", "linear", "nonlinear", "clusters"))
+
+ggplot(d_long, aes(x, value, group = name)) +
+  geom_point() +
+  facet_wrap(~name, scales = "free") +
+  xlab(NULL)
+```
+
+---
+
+## Variation
+
+.pull-left-40[
+A good visualization should describe the variation in the data.
+]
+
+.pull-right-60[
+```{r, echo = FALSE, fig.height = 3.2, fig.width = 5.5}
+d <- tibble(x = 1:100,
+            low_variance = x + rnorm(100, 0, 4),
+            high_variance = x + rnorm(100, 0, 20))
+
+pivot_longer(d, -x) %>%
+  ggplot(aes(x, value, group = name)) +
+  geom_point() +
+  ylab("y") +
+  facet_wrap(~name)
+```
+]
+
+--
+
+.pull-left-60[
+```{r, echo = FALSE, fig.height = 3.5, fig.width = 5.5}
+d <- tibble(x = 1:100,
+            y = rnorm(100, 0, x))
+
+ggplot(d, aes(x, y)) +
+  geom_point()
+```
+]
+
+.pull-right-40[
+Sometimes there is a pattern to the variation.
+]
+
+---
+
+## Time
+
+Time has a specific order, which makes the line geom a natural choice.
+
+Always place time on the horizontal (x) axis.
+
+```{r, fig.cap = "Median unemployment duration in the US.", fig.width = 9, fig.height = 3}
+ggplot(economics, aes(date, uempmed)) +
+  geom_line() + #<<
+  xlab("Time") +
+  ylab("Unemployment duration")
+```
+
+---
+
+## Geoms and Time
+
+often useful to combine points and lines when measurements
+are taken at irregular intervals or seldom
+
+```{r, fig.cap = "Weight of a chick over time.", fig.width = 6, fig.height = 3.3}
+filter(ChickWeight, Chick == 5) %>%
+  ggplot(aes(Time, weight)) +
+  geom_point() + #<<
+  geom_line() #<<
+```
+
+
+---
+
+## Categorical Variables
+
+Categorical variables (factors) can be used
+as the second dimension.
+
+```{r, fig.cap = "Boxplot of total sleep duration for different mammals.", fig.width = 7}
+ggplot(msleep, aes(vore, sleep_total)) +
+  geom_boxplot()
+```
+
+---
+
+## Ordered Factors
+
+Pay attention to whether or not the factor is **ordered**.
+
+.pull-left[
+```{r, echo = FALSE, fig.height = 6}
+mutate(OrchardSprays, treatment = fct_shuffle(treatment)) %>%
+  ggplot(aes(treatment, decrease)) +
+  geom_boxplot()
+```
+]
+
+--
+
+.pull-right[
+```{r, echo = FALSE, fig.height = 6}
+ggplot(OrchardSprays, aes(treatment, decrease)) +
+  geom_boxplot()
+```
+]
+
+---
+
+## Discrete Data
+
+A problem when one (or both) variables are discrete (or categorical)
+is that they might **overlap**.
+
+simple solution: **opacity** (`alpha`)
+
+.pull-left[
+```{r}
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point() 
+```
+]
+
+--
+
+.pull-right[
+```{r}
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point(alpha = 0.2) #<<
+```
+]
+
+---
+
+## Scales
+
+For some variables, it is more natural to study them on a non-standard scale
+
+Other times it is simply **convenient** (more compact).
+
+.pull-left[
+```{r, fig.height = 3.5}
+ggplot(msleep, 
+       aes(brainwt, 
+           sleep_total)) +
+  geom_point() +
+  scale_y_continuous() #<<
+```
+]
+
+--
+
+.pull-right[
+```{r, fig.height = 3.5}
+ggplot(msleep, 
+       aes(brainwt, 
+           sleep_total)) +
+  geom_point() +
+  scale_x_log10() #<<
+```
+]
+
+---
+
+class: section-title
+
+# Scales
+
+---
+
+## Scales and Ranges
+
+Choosing appropriate scales can make or break a visualization!
+
+must be **knowledgeable** about what the data represent
+
+sometimes obvious choice, other times **tricky** to pick scales appropriately
+
+.pull-left[
+```{r, echo = FALSE}
+library(tidyverse)
+library(lubridate)
+
+bra <- tibble(
+  year = ymd(2010:2019, truncated = 2),
+  crime = c(1370399,
+            1416280, 
+            1402588, 
+            1401982,
+            1443753,
+            1503399,
+            1510197,
+            1514902,
+            1550626,
+            1548406)
+)
+
+ggplot(bra, aes(year, crime)) +
+  geom_line() +
+  geom_point()
+```
+]
+
+--
+
+.pull-right[
+```{r, echo = FALSE}
+ggplot(bra, aes(year, crime)) +
+  geom_line() +
+  geom_point() +
+  ylim(c(0, max(bra$crime)*1.05))
+```
+]
+
+.center[*Number of reported crimes in Sweden (https://www.bra.se).*]
+
+---
+
+## Limits
+
+not always appropriate to include entire range, such as when
+
+- 0 is not a meaningful value for the variable,
+- only a small subset of the range is attained in practice, or
+- when even small differences matter a lot
+
+--
+
+```{r, echo = FALSE, fig.cap = "Change in reported crimes between 2019 and 2020 in Sweden (https://bra.se).", fig.show = "hold", crop = NULL}
+bra2 <- tibble(
+  month = ymd(200001 + seq(100, 700, by = 100)),
+  crime_change = c(7, 10, -4, -5, -3, 3, 6)
+)
+
+ggplot(bra2, aes(month, crime_change)) +
+  geom_point() +
+  geom_linerange(aes(ymax = crime_change), ymin = 0) +
+  geom_hline(yintercept = 0)
+
+ggplot(bra2, aes(month, crime_change)) +
+  geom_point() +
+  geom_linerange(aes(ymax = crime_change), ymin = 0) +
+  geom_hline(yintercept = 0) +
+  ylim(-100, 100)
+```
+
+
+---
+
+## Color Scales
+
+Choosing scales for color-mapped variables can also be problematic!
+
+```{r, fig.cap = "Life expectancy in the US.", echo = FALSE, fig.width = 10, fig.height = 6}
+library(maps)
+library(mapproj)
+
+arrests <-
+  USArrests %>%
+  rownames_to_column("state") %>%
+  mutate(state = tolower(state))
+
+states_data <- 
+  as.data.frame(state.x77) %>%
+  rownames_to_column("State") %>%
+  as_tibble() %>%
+  mutate(State = tolower(State)) %>%
+  filter(State != "alaska" & State != "hawaii")
+
+states_map <- map_data("state") %>%
+  filter(region != "district of columbia")
+
+ggplot(states_data, aes(map_id = State)) +
+  geom_map(aes(fill = `Life Exp`), map = states_map) +
+  expand_limits(x = states_map$long, y = states_map$lat) +
+  coord_map("bonne", param = 45) +
+  theme_void()
+```
+
+---
+
+## Color Scales
+
+Choosing scales for color-mapped variables can also be problematic!
+
+```{r, fig.cap = "Life expectancy in the US with other limits.", echo = FALSE, fig.width = 10, fig.height = 6}
+ggplot(states_data, aes(map_id = State)) +
+  geom_map(aes(fill = `Life Exp`), map = states_map) +
+  expand_limits(x = states_map$long, y = states_map$lat) +
+  scale_fill_continuous(limits = c(66, 80)) +
+  coord_map("bonne", param = 45) +
+  theme_void()
+```
+
+---
+
+## The Lie Factor
+
+.pull-left[
+another concept introduced by Edward Tufte
+
+$$
+\text{lie factor} = \frac{\text{effect in visualization}}{\text{size of effect in data}}
+$$
+should strive for a lie factor of 1
+]
+
+.pull-right[
+```{r, echo = FALSE, fig.cap = "Data mapped to height and width of the doctor image, inducing a lie factor of 2.8.", out.width = "90%"}
+knitr::include_graphics("images/liefactor_doctor.jpg")
+```
+]
+

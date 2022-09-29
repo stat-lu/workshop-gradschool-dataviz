@@ -1,0 +1,204 @@
+---
+title: "Practice: One Variable"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: true
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  fig.align = "center",
+  fig.width = 5,
+  fig.height = 4,
+  dev = "png"
+)
+options(scipen = 999)
+```
+
+# Overview
+
+In this session we will visualize the distribution of a single variable.
+
+You need to install the following packages:
+
+- [modeldata](https://CRAN.R-project.org/package=modeldata)
+- [patchwork](https://CRAN.R-project.org/package=patchwork)
+
+# Penguins 
+
+Load **tidyverse** and the **modeldata** packages. Some packages directly
+export their dataset but the **modeldata** package does not, which means me
+need to call `data(penguins)` to make this package available to us. 
+
+```{r}
+library(tidyverse)
+library(modeldata)
+
+data(penguins)
+```
+
+Start by familiarizing yourself with the dataset. A good first step is to call
+`head(penguins)` and `glimpse(penguins)`. Also read the documentation for the
+dataset (although in this case it is not very revealing) by using the `F1`
+shortcut in R Studio or by calling `?penguins`.
+
+Plot a dotplot of the `body_mass_g` variable in the penguins data using the
+default settings by calling the following lines.
+
+```{r fig.show = "hide"}
+ggplot(penguins, aes(body_mass_g)) +
+  geom_dotplot(binwidth = 100)
+```
+
+Now plot another dotplot using a binwidth of 1. What happens? Why is this setting
+not appropriate for this data?
+
+## Histogram
+
+Continue by plotting the `body_mass_g` variable using a histogram with the default
+settings.
+
+```{r, include = FALSE}
+ggplot(penguins, aes(body_mass_g)) +
+  geom_histogram()
+```
+
+The default value is to use 30 bins for the histogram, which is not always
+optimal. This time we'll use a custom sequence of break points for our
+histogram bins. Create a vector of break points at 2500, 3500, 4000, 5000, and
+7200 by using the `c()` function and use this vector inside the call to
+`geom_histogram()`.
+
+*Hint: Look through the arguments section of the
+documentation for `geom_histogram()` to find out which
+argument to use when supplying the vector of break points. It's not
+`bindwidth`!*
+
+```{r, include = FALSE}
+breaks <- c(2500, 3500, 4000, 5000, 7200)
+
+ggplot(penguins, aes(body_mass_g)) +
+  geom_histogram(breaks = breaks)
+```
+
+```{r, eval = FALSE}
+# create a vector of break points
+breaks <- c(NA)
+
+# call ggplot, using your vector of break points
+```
+
+Can you figure out, approximately, how many observations there are in the
+5000--72000 bin?
+
+### Histogram Bin Rules-of-Thumb
+
+There have been several attempts to produce rules of thumb for selecting
+settings for either the number of bins or the bin width. Although you shouldn't
+be using these blindly, they do take away a bit of the guesswork in selecting
+bins and removes some of the possibility for bias. Go to
+<https://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width> and read up
+on the **Rice Rule**.
+
+Compute the optimal number of bins for the Penguins data 
+set according to the Rice Rule and try it out on the `body_mass_g` variable.
+
+*Hint 1: Use `drop_na()` to drop all observation that have missing values
+on `body_mass_g()` and then count the number of observations using `nrow()`.*
+
+*Hint 2: Note that $\sqrt[^3]{n} = n^\frac{1}{3}$.*
+
+```{r, include = FALSE}
+n <- drop_na(penguins, body_mass_g) %>%
+  nrow()
+
+k <- 2 * n^(1/3)
+```
+
+Figure out what the optimal number of bins is with this rule, and then
+use this in your histogram. What do you think of the result?
+
+```{r include = FALSE}
+ggplot(penguins, aes(body_mass_g)) +
+  geom_histogram(bins = k)
+```
+
+## Box Plots
+
+Now plot a box plot of the `body_mass_g` variable in the penguins data.
+
+```{r, include = FALSE}
+ggplot(penguins, aes(body_mass_g)) +
+  geom_boxplot()
+```
+
+Try to figure out how many outliers there are in the plot. What is the median?
+
+## Density Plots
+
+Let's try to use a density plot instead. First plot a density plot of body mass
+in the penguins data using the default settings.
+
+```{r, include = FALSE}
+ggplot(penguins, aes(body_mass_g)) +
+  geom_density(kernel = "rectangular")
+```
+
+Then, change the kernel for the density plot to a rectangular kernel.
+
+What happens to the plot after you've switched the kernel to the rectangular
+one?
+
+If you want to, try to play around with a few other kernels.
+
+# Patching Plots
+
+The **patchwork** package is useful for combining separate ggplots into
+one visualization. It's very easy to use yet is still flexible enough
+to be able to generate a wide variety of layouts. First load the package.
+
+```{r}
+library(patchwork)
+```
+
+Now create three box plots, one for each of bill depth, bill length, and
+flipper length for the penguins data set. Use the patchwork package to
+combine the three box plots into one layout.
+
+The easiest way to combine plots together with patchwork is to simply
+add them together using `+`.
+
+Try to run the following code.
+
+```{r eval = FALSE}
+p <- ggplot(penguins)
+
+p1 <- p + geom_boxplot(aes(y = bill_depth_mm))
+p2 <- p + geom_boxplot(aes(y = bill_length_mm))
+p3 <- p + geom_boxplot(aes(y = flipper_length_mm))
+
+p1 + p2 + p3
+```
+
+Instead of `+`, you can use `|` too. In addition to these, you can
+also use `/` and use parenthesis to group plots together. Try out some of
+these on the plots above.
+
+Let's say you want to stack `p1` and `p2` horizontally on top and
+have `p3` on the bottom, spanning the entire width of the plot area. How
+would you go about doing that?
+
+If you have time over, go to [the patchwork
+webpage](https://patchwork.data-imaginist.com/index.html) and check out
+the *Guides* for more details about all the types of fun things you
+can do with patchwork.

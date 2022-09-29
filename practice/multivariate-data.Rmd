@@ -1,0 +1,256 @@
+---
+title: "Practice: Multivariate Data"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  cache      = FALSE,
+  fig.width  = 5,
+  fig.height = 4,
+  dev        = "png"
+)
+
+options(scipen = 999)
+
+library(tidyverse)
+```
+
+# Overview
+
+In this quiz we will practice visualizing multiple variables using
+aesthetics and facets.
+
+For this session, you will need to install the following packages:
+
+- [ggrepel](https://CRAN.R-project.org/package=ggrepel)
+- [ggtern](https://CRAN.R-project.org/package=ggtern) (optional)
+
+Do so (if you haven't already) by running the following code.
+
+```{r eval = FALSE}
+install.packages(c("ggrepel", "ggtern"))
+```
+
+# Star Wars
+
+Let's return to the Star Wars data set (`starwars`) that we saw earlier!
+
+Begin with a scatter plot of height versus mass. Map the sex of the characters
+to color of the points and use a logarithmic scale for the y axis.
+Change the color palette if you prefer.
+
+```{r include = FALSE}
+ggplot(starwars, aes(height, mass, color = sex)) +
+  geom_point() +
+  scale_y_log10()
+```
+
+One of the characters seem to stand out in terms of mass. To find out who this
+outlier might be (which might not be hard to guess for anyone who is a Star Wars
+fan) we'll map text to these observations. To do so, we'll use the **ggrepel**
+package. Load the package.
+
+```{r}
+library(ggrepel)
+```
+
+Now add the `geom_text_repel()` geom to your previous plot. Map `name` to
+`label`.
+
+```{r include = FALSE}
+ggplot(starwars, aes(height, mass, color = sex, label = name)) +
+  geom_point() +
+  scale_y_log10() +
+  geom_text_repel()
+```
+
+*Note: we could have just used `geom_text()` or `geom_label()` instead here,
+but the `geom_text_repel()` function from **ggrepel** automatically avoids
+overlap in the plot, which is often very useful.*
+
+# Adding Labels only to Some Observations
+
+The plot nicely connects names to the points but is kind of messy. For data sets
+where this happens, it might be worthwhile to consider whether it's possible to
+reduce the amount of clutter by applying text labels only to some observations.
+
+To do so, the best way is to create a separate, filtered data
+set for the labels we want. Let's say that we want to label the observation in each level of `sex`
+with the largest mass. To proceed, we group by
+sex and slice the data set so that only the observations with the highest mass
+in each group remain, then we `pull()` the `name` variable and store it in
+`high_mass`.
+
+```{r}
+high_mass <-
+  starwars %>%
+  group_by(sex) %>%
+  slice(which.max(mass)) %>%
+  pull(name)
+```
+
+Next, we `mutate()` the data set by adding a new variable `highlight` that gives
+the name of the observation if it corresponds to one of the observations in
+`high_mass` and otherwise `""`, which results in no label.
+
+```{r}
+starwars2 <-
+  starwars %>%
+  mutate(highlight = ifelse(name %in% high_mass, name, ""))
+```
+
+Now we are ready to plot. Use the new `highlight` column as your `label`
+mapping, but keep the plot the same otherwise.
+
+```{r include = FALSE}
+ggplot(starwars2, aes(height, mass, color = sex, label = highlight)) +
+  geom_point() +
+  scale_y_log10() +
+  geom_text_repel()
+```
+
+Which character has the largest mass in the `NA` group?
+
+- Sly Moore [correct]
+- Grievous
+- IG-88
+- Beru Whitesun lars
+
+# Faceting
+
+Let's take a closer look at the relationship between height and mass across the
+different star wars movies. The column `films` contains character vectors of
+this, but to use it in a plot, we first need to `unnest()` this column.
+
+Call the following line to unnest this column, creating a longer version of the
+data set wherein each character may occur more than once.
+
+```{r}
+starwars3 <-
+  unnest(starwars2, films)
+```
+
+Now create a new scatter plot, again with mass against height on the x and y
+axes, but with facets corresponding to `gender` (note: not sex) and `films`.
+Keep the scale transformation you used previously (logarithmic). You can also
+keep the labels you used in your previous plot or, if you want a bonus task,
+create new labels using the method above to highlight the heaviest character for
+each film and gender.
+
+Note that you can use both `facet_wrap()` and `facet_grid()` here. Try out both
+and compare the results.
+
+```{r include = FALSE}
+ggplot(starwars3, aes(height, mass, color = sex, label = highlight)) +
+  geom_point() +
+  scale_y_log10() +
+  geom_text_repel() +
+  facet_grid(gender ~ films)
+```
+
+# Switzerland Demographics Revisited
+
+Once more, we take a look at the data from provinces in Switzerland (stored in
+the `swiss` data set), which you should be familiar with by now. Before we get
+started, let's make a tibble out of the data.frame by calling the following
+command.
+
+```{r}
+swiss2 <- as_tibble(swiss, rownames = "Province")
+```
+
+This time, create a bubble plot with `Agriculture` and `Examination` mapped to
+the x and y axes respectively and `Fertility` mapped to the radii of the
+bubbles. Also add text labels as before. Put the `size` mapping
+inside the call to `geom_point()` to avoid mapping text size to fertility.
+
+```{r include = FALSE}
+ggplot(swiss2, aes(Agriculture, Examination, label = Province)) +
+  geom_point(aes(size = Fertility), col = "steelblue4") +
+  geom_text_repel()
+```
+
+What do you think of the bubbles in the plot? Try to guess what the values
+are by looking at the size of the bubbles. As a bonus exercise, 
+compute the right answers and see if you were correct.
+
+# Mapping Color to Categories
+
+Let's take this plot one step further. Let's create a new variable in the data
+set indicating whether the province is mostly Catholic or mostly protestant and
+then color the bubbles in your plot based on this variable. 
+
+```{r}
+swiss3 <-
+  swiss2 %>%
+  mutate(Religion = ifelse(Catholic >= 50, "Catholic", "Protestant"))
+
+```
+
+```{r include = FALSE}
+ggplot(
+  swiss3,
+  aes(Agriculture, Examination, label = Province, color = Religion)
+) +
+  geom_point(aes(size = Fertility)) +
+  geom_text_repel()
+```
+
+Which catholic province has the lowest proportion of workers working in
+agriculture?
+
+- Rive Gauche
+
+## Bonus: Ternary Plots
+
+Ternary plots can be used to visualize three variables in two-dimensional
+display and are useful for compositional data when three features (variables)
+sum to a constant, typically 1 (100%). They are common when studying geological
+features, such as samples of rocks, when each sample is comprised of three
+different types of minerals, for example.
+
+To plot ternary plots with ggplot2, load the **ggtern** package, which you
+should have installed by now.
+
+```{r}
+library(ggtern)
+```
+
+The package comes with a few data sets to showcase ternary plots and we'll use
+the `Feldspar` data set here. Load it by calling `data(Feldspar)`. Now, to
+construct a ternary plot, use the `ggtern()` function instead of `ggplot()`. It
+is a wrapper to the latter, which provides a coordinate transformation that is
+necessary to get reasonable results.
+
+Then, to produce the plot, map `An` to the x axis, `Ab` to the y axis, and `Or`
+to the z axis. Also map color to the feldspar variety (`Feldspar`).
+
+```{r include = FALSE}
+data(Feldspar)
+
+ggtern(Feldspar, aes(An, Ab, z = Or, col = Feldspar)) +
+    geom_point()
+```
+
+The resulting plot shows, for each sample of feldspar, its composition in terms
+of the three constituents `Ab`, `Or`, and `An`, which represents chemical
+compounds. To read the individual values for any point, you read the chart along
+the diagonal or horizontal grid lines. Note also that the labels for the
+components are positioned such that a observation close to it indicates that it
+contains a lot of that component.
+
+What is (roughly) the highest value of `Or` that any Feldspar in the group
+"Plagioclase" takes? (A margin of +- 5 is tolerated).
+
+- 20 (+- 5)

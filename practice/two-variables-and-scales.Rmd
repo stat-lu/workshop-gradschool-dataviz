@@ -1,0 +1,162 @@
+---
+title: "Practice: Two Variables and Scales"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  fig.width = 5,
+  fig.height = 4,
+  dev = "png"
+)
+
+options(scipen = 999)
+
+library(tidyverse)
+```
+
+# Overview
+
+For this session you need the following packages:
+
+- [tsibble](https://CRAN.R-project.org/package=tsibble)
+- [MASS](https://CRAN.R-project.org/package=MASS)
+
+If you haven't already installed them, use the following code to do so.
+
+```{r, eval = FALSE}
+install.packages(c("tsibble", "MASS"))
+```
+
+# Swiss Demographics
+
+```{r, include = FALSE}
+ggplot(swiss, aes(Catholic, Fertility)) +
+  geom_point()
+```
+
+Let's take a look at the `swiss` data set. First, as always, browse the
+documentation for the data set to get a sense of what the data concerns.
+
+Try to explore some of the relationships in the data, focusing on
+the relationship between fertility and the other variables in the data set.
+For which relationsips does the correlation appear to be strongest?
+Try to describe the relationships you see.
+
+# Miles per Gallon
+
+Use the `mpg` data set to plot a scatter plot of number of cylinders against
+highway miles per gallon.
+
+```{r, include = FALSE}
+ggplot(mpg, aes(cyl, hwy)) +
+  geom_point()
+```
+
+There is a lot of overlap in the plot, which we should solve using jittering. In
+which direction should the points be jittered (provided `cyl` is on the x axis
+and `hwy` on the y axis)?
+
+## Opacity 
+
+Again plot a scatter plot of the number of cylinders against highway miles per
+gallon using the `mpg` data set but this time use opacity to alleviate the effect
+of overlap.
+
+```{r, include = FALSE}
+ggplot(mpg, aes(cyl, hwy)) +
+  geom_point(alpha = 0.2)
+```
+
+What happens if you set the opacity level (`alpha`) to 2?
+
+- it works and is equivalent to setting it to 1 [correct]
+- an error is thrown since only values between 0 and 1 are allowed
+- a darker color is used (unless the color is black, in which case nothing
+  happens)
+- the default opacity if halved
+
+## Box Plots
+
+Make another plot of cylinders against highway miles per gallons, but this time
+using a box plot instead. To do so, you need to first convert the cylinder
+variable into a factor, and then construct the plot. (You can also do this
+directly in the ggplot2 call, but then you need to modify the labels
+accordingly.)
+
+```{r include = FALSE}
+mutate(mpg, cyl = as_factor(cyl)) %>%
+  ggplot(aes(cyl, hwy)) +
+    geom_boxplot()
+```
+
+What do you think about this plot compared to the scatter plot?
+
+# Flow of River Nile
+
+Run the following code to create a ggplot2-compatible data set out of the Nile
+time series.
+
+```{r}
+library(tsibble)
+
+nile <- as_tsibble(Nile) %>%
+  rename(year = index, flow = value)
+```
+
+Read the documentation for the Nile data set and then construct
+a plot to investigate the flow of the river across time.
+Are there any seasonal trends in the plot?
+
+# Mammals
+
+Next, we'll look at some data on body and brain size of mammals; this time we'll
+use the `mammals` data set from the **MASS** package. We make the
+data set available by using the `data()` function in the following manner and
+then tidy it up by turning the rownames into its own column.
+
+```{r}
+data("mammals", package = "MASS")
+
+# turn the rownames into a real variable
+mammals_tidy <- rownames_to_column(mammals, "mammal")
+```
+
+*The reason that we are avoiding just calling `library(MASS)` here is that
+**MASS** contains some functions that cause conflicts with functions from
+**tidyverse**.*
+
+Next, plot a standard scatter plot of body size against brain size using the
+code below.
+
+```{r mammals, eval = FALSE}
+ggplot(mammals_tidy, aes(body, brain)) +
+  geom_point()
+```
+
+As you can see, this plot does not really work too well. Try to fix this
+problem by using different scales.
+
+```{r eval = FALSE, echo = FALSE}
+ggplot(mammals, aes(body, brain)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+Is there any downside to using non-linear scales?
+
+If you have time left over, check out `geom_text()` and see if you
+can add a text layer for the plot of mammals by mapping to the `mammal`
+variable.

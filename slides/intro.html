@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Johan Larsson (Department of Statistics)" />
+    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, center, title-slide
+
+.title[
+# Introduction
+]
+.subtitle[
+## Data Visualization with R and ggplot2
+]
+.author[
+### Johan Larsson (Department of Statistics)
+]
+.institute[
+### Graduate School at the Faculty of Social Sciences
+]
+.date[
+### 29 september, 2022
+]
+
+---
+
+
+
+
+class: section-title
+
+# Why Visualize?
+
+---
+
+class: center, middle
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/napoleon.png" alt="Charles Minard's visualization of Napoleon's Russian campaign of 1812." width="853" height="30%" /&gt;
+&lt;p class="caption"&gt;Charles Minard's visualization of Napoleon's Russian campaign of 1812.&lt;/p&gt;
+&lt;/div&gt;
+
+---
+class: center, middle
+
+.pull-left[
+&lt;table class="table" style="font-size: 13px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; region &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; employment (%) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Stockholms län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hallands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jönköpings län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Västra Götalands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Kronobergs län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 69.3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Uppsala län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 68.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Gotlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 68.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Östergötlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 67.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Värmlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 67.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Jämtlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 66.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Örebro län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 66.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Västmanlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Gävleborgs län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Västerbottens län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Kalmar län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Skåne län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dalarnas län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Västernorrlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Blekinge län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Norrbottens län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Södermanlands län &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+class: center, middle
+
+.pull-right[
+&lt;img src="intro_files/figure-html/unnamed-chunk-3-1.png" width="324" style="display: block; margin: auto;" /&gt;
+]
+
+---
+class: section-title
+
+# An example
+
+## GDP per capita and life expectancy across time
+
+---
+
+## First attempt
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Transforming the axis
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Grouping time, adding population
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Animated plots (using **gganimate**)
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-7-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Overview
+
+### Today
+
+- Introduction to ggplot2
+- One Variable and Data-Ink
+- Two Variables and Scales
+
+### Tomorrow
+
+- Categorical Data and Using Color
+- Multivariate Data
+- Animated and Interactive Visualizations
+- (Maps)
+- Work With a (your own?) Data Set
+
+---
+
+class: section-title
+
+# ggplot2
+
+---
+
+## ggplot2
+
+.pull-left[
+An R package designed for visualizing data
+]
+
+.pull-right[
+&lt;img src="images/ggplot2.png" width="200" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+### Tidyverse
+
+.pull-left[
+ggplot2 is part of the [tidyverse](https://www.tidyverse.org/): a collection
+of R packages built around the notion of **tidy data**.
+
+]
+.pull-right[
+&lt;img src="images/tidyverse-logo.png" width="200" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## The Grammar of Graphics
+
+.pull-left[
+ggplot2 is built upon Hadley Wickham's
+*Layered Grammar of Graphics* &lt;a name=cite-wickham2010&gt;&lt;/a&gt;([Wickham, 2010](http://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098)). 
+
+This is a modified version of Leland Wilkinson's *Grammar of Graphics* 
+&lt;a name=cite-wilkinson2005&gt;&lt;/a&gt;([Wilkinson, 2005](#bib-wilkinson2005))
+
+### The Layered Grammar of Graphics
+
+Defines the components of a plot as
+  
+  * layers,
+  * scales,
+  * a coordinate system, and
+  * facets.
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/wilkinson.jpg" alt="Wilkinson" width="180" /&gt;
+&lt;p class="caption"&gt;Wilkinson&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/wickham.jpg" alt="Wickham" width="180" /&gt;
+&lt;p class="caption"&gt;Wickham&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+## Layers
+
+.pull-left[
+A layer consists of
+
+* data and aesthetic mapping,
+* a statistical transformation (stat),
+* a geometric object (geom), and
+* a position adjustment.
+
+The plot on the right uses two layers: a density estimate and points.
+
+]
+
+.pull-right[.vcenter[
+&lt;img src="intro_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]]
+
+---
+
+## Layers: Data and Mappings
+
+.pull-left[
+Any visualization needs a data set (here `mpg` from ggplot2).
+
+We **map** variables (in the dataset) to aesthetics (in the plot), such as
+
+* city miles per gallon (cty) to the x axis
+* engine displacement (displ) to the y axis
+* car class to color
+
+
+]
+
+.pull-right[.vcenter[
+&lt;img src="intro_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]]
+
+---
+
+## Layers: Statistical Transformations
+
+.pull-left-40[
+Statistical transformations modify or summarize data.
+
+Can be used to smooth, summarize, or modify
+
+A stat can add **new** variables.
+
+Stats have names of the form `stat_*`.
+
+Can also be specified directly in `geom_*` functions
+]
+
+.pull-right-60[
+
+```r
+ggplot(faithful, 
+       aes(waiting, eruptions)) +
+  geom_point() +
+  stat_density_2d()
+```
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+## Layers: Geoms
+
+.pull-left[
+**Geoms** decide what geometrical objects are used when plotting.
+
+Geoms have names of the form `geom_*`.
+
+
+]
+
+.pull-right[
+&lt;img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-15-2.png" width="576" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-15-3.png" width="576" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+## Layers: Position Adjustments
+
+Sometimes need to modify positions of geoms, such as stacking bar geoms
+side-by-side or jittering points that overlap
+
+.pull-left[
+
+
+```r
+# points overlap
+ggplot(mpg, aes(hwy, drv)) +
+  geom_point()
+```
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+# jitter to avoid overlap
+ggplot(mpg, aes(hwy, drv)) +
+  geom_point(
+*   position = position_jitter(
+*     width = 0,
+*     height = 0.2)
+  )
+```
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Scales
+
+A **scale** controls how variables are mapped to aesthetics.
+
+A **guide** is the inverse of a scale, showing how to read the scale.
+
+
+
+.pull-left[
+&lt;img src="intro_files/figure-html/unnamed-chunk-19-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+&lt;img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Coordinate Systems
+
+.pull-left-60[
+Coordinate systems control the position of geoms in the plot.
+
+
+
+
+
+
+]
+
+.pull-right-40[
+&lt;img src="intro_files/figure-html/unnamed-chunk-23-1.png" width="252" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-24-1.png" width="252" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Faceting
+
+Facets plots small multiples in separate facets (panels).
+
+ggplot2 provides `facet_grid()` and `facet_wrap()`.
+
+
+
+.pull-left[
+
+```r
+ggplot(
+  d, 
+  aes(x = Class, 
+      y = survival_rate)
+) +
+  geom_col() +
+* facet_wrap(vars(Sex))
+```
+]
+
+.pull-right[
+&lt;img src="intro_files/figure-html/unnamed-chunk-26-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## A Hierarchy of Defaults
+
+.pull-left[
+Having to supply all the parts of the grammar with each plot would be **very**
+tiresome.
+
+Thankfully, the grammar of graphics (and ggplot2) comes with a **hierarchy of defaults**.
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+
+
+is equivalent to
+
+
+]
+
+---
+
+## Data Semantics
+
+
+
+* Most data is made up of a rectangular table of **rows** and **columns**.
+* The elements (cells) in this table are **values**.
+* Each value corresponds to an **observation** and a **variable**.
+* There are usually multiple ways to format the same data.
+
+&lt;br&gt;
+
+--
+
+.pull-left[
+&lt;table&gt;
+&lt;caption&gt;Version A&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; person &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; control &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; treatment &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; James &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Julia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bixby &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;Version B&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; intervention &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; James &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Julia &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Bixby &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; treatment &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+.pull-left[
+
+## Tidy Data
+
+When data is tidy,
+
+* each observation has its own **row**,
+* each variable its own **column**, and
+* each value its own **cell**.
+
+In our example, **person**, **intervention**, and **result** are the variables.
+]
+
+.pull-right[
+&lt;br&gt;
+
+&lt;table&gt;
+&lt;caption&gt;Tidy treament data&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; person &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; intervention &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; result &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; James &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Julia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bixby &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; James &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; treatment &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Julia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; treatment &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bixby &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; treatment &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+&lt;img src="images/tidy-data.png" width="853" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: center, middle
+
+## Time to Practice!
+
+---
+
+## References
+
+&lt;a name=bib-wickham2010&gt;&lt;/a&gt;[Wickham, H.](#cite-wickham2010) (2010). "A
+Layered Grammar of Graphics". In: _Journal of computational and
+graphical statistics_ 19.1, pp. 3-28. ISSN: 1061-8600. DOI:
+[10.1198/jcgs.2009.07098](https://doi.org/10.1198%2Fjcgs.2009.07098).
+URL:
+[http://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098](http://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098)
+(visited on mar. 13, 2020).
+
+&lt;a name=bib-wilkinson2005&gt;&lt;/a&gt;[Wilkinson, L.](#cite-wilkinson2005)
+(2005). _The Grammar of Graphics_. 2nd edition. New York: Springer.
+ISBN: 978-0-387-24544-7.
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

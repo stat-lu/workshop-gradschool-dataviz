@@ -11,7 +11,17 @@ how to download and install these.
 
 - [Preparations](preparations)
 
-### Source code
+### Thursday
 
-The source code for all of the material here can be found at
-<https://github.com/stat-lu/workshop-gradschool-dataviz>.
+- [Introduction](slides/intro) ([practice](practice/intro))
+- [One Variable and Data-Ink](slides/one-variable-and-data-ink) ([practice](practice/one-variable))
+- [Two Variables and Scales](slides/two-variables-and-scales) ([practice](practice/two-variables-and-scales))
+
+### Friday
+
+- [Categorical Data and Color](slides/categorical-data-and-color) ([practice](practice/categorical-data-and-color))
+- [Multivariate Data](slides/multivariate-data) ([practice](practice/multivariate-data))
+
+#### Introduction
+
+### Friday

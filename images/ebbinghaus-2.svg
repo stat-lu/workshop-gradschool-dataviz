@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="650"
+   height="400"
+   version="1.1"
+   id="svg36"
+   sodipodi:docname="ebbinghaus-simplified.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs40" />
+  <sodipodi:namedview
+     id="namedview38"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.59"
+     inkscape:cx="325.42373"
+     inkscape:cy="200"
+     inkscape:window-width="1916"
+     inkscape:window-height="1096"
+     inkscape:window-x="1080"
+     inkscape:window-y="303"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg36" />
+  <circle
+     r="32"
+     fill="#e67f39"
+     id="circle2"
+     cx="215"
+     cy="200" />
+  <circle
+     r="32"
+     fill="#e67f39"
+     id="circle17"
+     cx="545"
+     cy="200" />
+</svg>

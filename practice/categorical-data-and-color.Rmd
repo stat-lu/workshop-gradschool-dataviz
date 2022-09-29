@@ -1,0 +1,150 @@
+---
+title: "Practice: Categorical Data and Color"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  cache      = FALSE,
+  fig.width  = 5,
+  fig.height = 4,
+  dev        = "png"
+)
+
+options(scipen = 999)
+
+library(tidyverse)
+```
+
+# Overview
+
+For this quiz you are going to need the
+[titanic](https://CRAN.R-project.org/package=titanic) package
+
+If you haven't already installed it, just call
+
+```{r eval = FALSE}
+install.packages("titanic")
+```
+
+# The Maiden Voyage of the Titanic
+
+Let's explore some date of survival from the maiden voyage of the Titanic. There
+is a data set available in the base R distribution, but we'll use a slightly
+more extensive data set from the **titanic** package. This data set is divided
+into two objects: `titanic_train` and `titanic_test`. The latter of these,
+however, does not contain information on survival, so we will just use the
+`titanic_train` set.
+
+```{r}
+library(titanic)
+```
+
+Call `head()` on the data set (`titanic_train`) to get an idea of what it looks
+like.
+
+Well, it's not very neatly formatted. Tidy it up by calling the following code
+in which we rename and re-code some of the variables. 
+
+```{r}
+titanic <-
+  as_tibble(titanic_train) %>%
+  select(PassengerId, Class = Pclass, Sex, Age, Survived) %>%
+  mutate(
+    Age = as_factor(ifelse(Age < 18, "Chid", "Adult")),
+    Survived = as_factor(ifelse(Survived, "Yes", "No"))
+  )
+```
+
+## A Simple Bar Chart
+
+Let's start easy: begin with a simple bar chart of the counts of each class.
+
+```{r include = FALSE}
+ggplot(titanic, aes(Class)) +
+  geom_bar()
+```
+
+Now proceed to create a grouped bar chart by adding the sex variable too.
+Try swapping the mappings between class and sex and observe how the 
+information you are able to glean from the visualization changes.
+Since class is an ordinal variable, use an appropriate color scale.
+
+## Grouped Bar Chart
+
+What we're really interested in is to see how survival is related to the
+different categorical variables in the data set. We'll start simply by looking
+at class and survival.
+
+Construct a grouped bar chart displaying class and survival. Think carefully
+about which variable you want to map to fill and swap the mappings to 
+see the effect this has on the visualization.
+
+```{r include = FALSE}
+ggplot(titanic, aes(Class, fill = Survived)) +
+  geom_bar(position = "dodge")
+```
+
+Can you see in which of the passenger classes a majority of the passengers
+died?
+
+Try to change the color manually for the the fill to some colors you think
+are good fits for the data.
+
+## Proportional Bar Charts
+
+It is hard to compare survival among the groups due to the differences in sizes
+of the groups. To get around this, plot a proportional stacked bar chart. 
+
+```{r include = FALSE}
+ggplot(titanic, aes(Class, fill = Survived)) +
+  geom_bar(position = "fill")
+```
+
+Consider the advantages and downsides to using this type of plot.
+
+## Grouped Proportional Bar Charts
+
+During the presentation, we used the following code to prepare data
+for plotting a grouped proportional bar chart.
+
+```{r eval = FALSE}
+happiness_props <- group_by(happiness, gender, happy) |>
+  summarize(n = n()) |>
+  mutate(prop = n / sum(n))
+```
+
+Adapt this code to the titanic data to plot a grouped, proportional bar
+chart.
+
+```{r include = FALSE}
+titanic_props <- 
+  group_by(titanic, Class, Survived) |>
+  summarize(n = n()) |>
+  mutate(prop = n / sum(n))
+
+ggplot(titanic_props, aes(Class, prop, fill = Survived)) +
+  geom_col(position = "dodge")
+```
+
+What do you think about this plot compared to the earlier ones? 
+
+## Mosaic Plots
+
+If you have time over, visit the webpage for
+[ggmosaic](https://haleyjeppson.github.io/ggmosaic/), which is an addon to
+ggplot2 that lets you draw mosaic plots, which can be used as an alternative
+to bar charts.
+
+Then try to create a mosaic plot for the Titanic data for all of the variables
+(age, sex, and survival status).
