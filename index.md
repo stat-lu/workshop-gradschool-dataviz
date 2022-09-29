@@ -20,12 +20,15 @@ how to download and install these.
 
 #### One Variable and Data-Ink
 
-- [One Variable and Data-Ink](slides/one-variable-and-data-ink) ([practice](practice/one-variable))
-- [Two Variables and Scales](slides/two-variables-and-scales) ([practice](practice/two-variables-and-scales))
+- [Slides](slides/one-variable-and-data-ink)
+- [Practice](practice/one-variable)
 
-### Friday
+#### Two Variables and Scales
 
-- [Categorical Data and Color](slides/categorical-data-and-color) ([practice](practice/categorical-data-and-color))
-- [Multivariate Data](slides/multivariate-data) ([practice](practice/multivariate-data))
-- [Animated and Interactive Visualizations](slides/animated-and-interactive-visualizations) ([practice](practice/animated-and-interactive-visualizations))
+- [Slides](slides/two-variables-and-scales)
+- [Practice](practice/two-variables-and-scales)
 
+#### Categorical Data and Color
+
+- [Slides](slides/categorical-data-and-color)
+- [Practice](practice/categorical-data-and-color)
