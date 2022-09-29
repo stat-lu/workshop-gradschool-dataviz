@@ -528,7 +528,7 @@ Python matplotlib library
 
 Perceptually uniform and adapted to individuals with color blindness.
 
-```{r viridisplot}
+```{r viridisplot, fig.height = 3, fig.width = 4}
 tibble(x = rnorm(1e4), y = rnorm(1e4)) |>
   ggplot(aes(x, y)) +
   geom_hex() + 

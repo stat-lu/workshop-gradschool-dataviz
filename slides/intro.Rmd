@@ -19,13 +19,13 @@ output:
 knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
 
 knitr::opts_chunk$set(
-  echo = FALSE,
+  echo = TRUE,
   warning = FALSE,
   message = FALSE,
   cache = FALSE,
   dev = "png",
-  fig.width = 8,
-  fig.height = 6,
+  fig.width = 5,
+  fig.height = 4.3,
   fig.align = "center",
   fig.retina = 3,
   dev.args = list(pointsize = 16),
@@ -59,10 +59,18 @@ options(digits = 3)
 
 ## Who am I?
 
+.pull-left[
 - Final-year PhD student at the [Department of Statistics](https://stat-lu.se).
 - Instructor for (and designer of) [STAE04: Data Visualisation](https://stat.lu.se/en/education/courses/stae04_data_visualisation)
 - Personal website: [larssonjohan.com](https://larssonjohan.com)
 - Twitter: [@joh_larsson](https://twitter.com/joh_larsson)
+]
+
+.pull-right[
+```{r out.width = "200", echo = FALSE}
+knitr::include_graphics("images/avatar-johan-square-800.jpg")
+```
+]
 
 ---
 
@@ -74,7 +82,7 @@ class: section-title
 
 class: center, middle
 
-```{r, fig.cap = "Charles Minard's visualization of Napoleon's Russian campaign of 1812.", out.height = "30%"}
+```{r, fig.cap = "Charles Minard's visualization of Napoleon's Russian campaign of 1812.", out.height = "30%", echo = FALSE}
 knitr::include_graphics("images/napoleon.png")
 ```
 
@@ -82,7 +90,7 @@ knitr::include_graphics("images/napoleon.png")
 class: center, middle
 
 .pull-left[
-```{r}
+```{r echo = FALSE}
 swe_employment <- readRDS("data/swe_employment.rds")
 
 tmp <- select(swe_employment, region, employment)
@@ -99,7 +107,7 @@ tmp[!duplicated(tmp), ] %>%
 class: center, middle
 
 .pull-right[
-```{r, fig.width = 4.5, fig.height = 8}
+```{r, fig.width = 4.5, fig.height = 8, echo = FALSE}
 ggplot(swe_employment, aes(long, lat, group = region, fill = employment)) +
   geom_polygon() +
   scale_fill_continuous(name = "employment (%)") +
@@ -119,7 +127,7 @@ class: section-title
 
 ## First attempt
 
-```{r, fig.width = 9, fig.height = 7}
+```{r, fig.width = 9, fig.height = 7, echo = FALSE}
 library(gapminder)
 
 gapminder %>%
@@ -135,7 +143,7 @@ gapminder %>%
 
 ## Transforming the axis
 
-```{r, fig.width = 9, fig.height = 7}
+```{r, fig.width = 9, fig.height = 7, echo = FALSE}
 gapminder %>%
   pivot_longer(c("lifeExp", "gdpPercap")) %>%
   ggplot(aes(year, value, colour = country)) +
@@ -145,12 +153,11 @@ gapminder %>%
   facet_wrap(vars(name), scales = "free_y")
 ```
 
-
 ---
 
 ## Grouping time, adding population
 
-```{r, fig.width = 9, fig.height = 7}
+```{r, fig.width = 9, fig.height = 7, echo = FALSE}
 gapminder %>%
   mutate(year = cut(year, 9)) %>%
   ggplot(aes(gdpPercap,
@@ -171,7 +178,7 @@ gapminder %>%
 
 ## Animated plots (using **gganimate**)
 
-```{r}
+```{r fig.width = 8, fig.height = 6, echo = FALSE}
 library(gganimate)
 
 ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = continent)) +
@@ -189,6 +196,23 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = continent)) +
 
 ---
 
+## Goals
+
+- Get comfortable working with ggplot2
+- Learn about the grammar of graphics
+- Learn how to visualize distributions of many variables at once
+- Learn how to modify scales in your plots
+- Learn how to use colors in visualizations
+
+--
+
+### What We Will Not Cover
+
+- Data Wrangling
+- Statistical Visualizations
+
+---
+
 ## Overview
 
 ### Today
@@ -196,14 +220,20 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = continent)) +
 - Introduction to ggplot2
 - One Variable and Data-Ink
 - Two Variables and Scales
+- Categorical Data and Using Color
 
 ### Tomorrow
 
 - Categorical Data and Using Color
 - Multivariate Data
 - Animated and Interactive Visualizations
-- (Maps)
+- Maps
 - Work With a (your own?) Data Set
+
+--
+
+And yes, there will be coffee and fika!
+
 
 ---
 
@@ -220,7 +250,7 @@ An R package designed for visualizing data
 ]
 
 .pull-right[
-```{r out.width = "200", fig.align = "center", echo = FALSE}
+```{r out.width = "170", fig.align = "center", echo = FALSE}
 knitr::include_graphics("images/ggplot2.png")
 ```
 ]
@@ -235,7 +265,7 @@ of R packages built around the notion of **tidy data**.
 
 ]
 .pull-right[
-```{r out.width = "200", fig.align = "center", echo = FALSE}
+```{r out.width = "170", fig.align = "center", echo = FALSE}
 knitr::include_graphics("images/tidyverse-logo.png")
 ```
 ]

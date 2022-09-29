@@ -37,10 +37,16 @@ class: middle, center, title-slide
 
 ## Who am I?
 
+.pull-left[
 - Final-year PhD student at the [Department of Statistics](https://stat-lu.se).
 - Instructor for (and designer of) [STAE04: Data Visualisation](https://stat.lu.se/en/education/courses/stae04_data_visualisation)
 - Personal website: [larssonjohan.com](https://larssonjohan.com)
 - Twitter: [@joh_larsson](https://twitter.com/joh_larsson)
+]
+
+.pull-right[
+&lt;img src="images/avatar-johan-square-800.jpg" width="200" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
@@ -161,7 +167,7 @@ class: center, middle
 class: center, middle
 
 .pull-right[
-&lt;img src="intro_files/figure-html/unnamed-chunk-3-1.png" width="324" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-4-1.png" width="324" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -175,26 +181,42 @@ class: section-title
 
 ## First attempt
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Transforming the axis
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /&gt;
-
+&lt;img src="intro_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Grouping time, adding population
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Animated plots (using **gganimate**)
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-7-1.gif" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-8-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Goals
+
+- Get comfortable working with ggplot2
+- Learn about the grammar of graphics
+- Learn how to visualize distributions of many variables at once
+- Learn how to modify scales in your plots
+- Learn how to use colors in visualizations
+
+--
+
+### What We Will Not Cover
+
+- Data Wrangling
+- Statistical Visualizations
 
 ---
 
@@ -205,14 +227,20 @@ class: section-title
 - Introduction to ggplot2
 - One Variable and Data-Ink
 - Two Variables and Scales
+- Categorical Data and Using Color
 
 ### Tomorrow
 
 - Categorical Data and Using Color
 - Multivariate Data
 - Animated and Interactive Visualizations
-- (Maps)
+- Maps
 - Work With a (your own?) Data Set
+
+--
+
+And yes, there will be coffee and fika!
+
 
 ---
 
@@ -229,7 +257,7 @@ An R package designed for visualizing data
 ]
 
 .pull-right[
-&lt;img src="images/ggplot2.png" width="200" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/ggplot2.png" width="170" style="display: block; margin: auto;" /&gt;
 ]
 
 --
@@ -242,7 +270,7 @@ of R packages built around the notion of **tidy data**.
 
 ]
 .pull-right[
-&lt;img src="images/tidyverse-logo.png" width="200" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/tidyverse-logo.png" width="170" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -255,6 +283,8 @@ ggplot2 is built upon Hadley Wickham's
 
 This is a modified version of Leland Wilkinson's *Grammar of Graphics* 
 &lt;a name=cite-wilkinson2005&gt;&lt;/a&gt;([Wilkinson, 2005](#bib-wilkinson2005))
+
+--
 
 ### The Layered Grammar of Graphics
 
@@ -295,7 +325,7 @@ The plot on the right uses two layers: a density estimate and points.
 ]
 
 .pull-right[.vcenter[
-&lt;img src="intro_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-13-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]]
 
 ---
@@ -312,10 +342,18 @@ We **map** variables (in the dataset) to aesthetics (in the plot), such as
 * car class to color
 
 
+```r
+library(tidyverse)
+mpg |&gt;
+  ggplot(aes(x = cty, 
+             y = displ, 
+             color = class)) +
+  geom_point()
+```
 ]
 
 .pull-right[.vcenter[
-&lt;img src="intro_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-14-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]]
 
 ---
@@ -343,7 +381,7 @@ ggplot(faithful,
   stat_density_2d()
 ```
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -357,10 +395,22 @@ ggplot(faithful,
 Geoms have names of the form `geom_*`.
 
 
+```r
+# construct base plot
+p &lt;- 
+  economics |&gt;
+  head(25) |&gt;
+  ggplot(aes(date, pce))
+
+# three different geoms
+p + geom_line()
+p + geom_point()
+p + geom_area()
+```
 ]
 
 .pull-right[
-&lt;img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-15-2.png" width="576" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-15-3.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="360" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-16-2.png" width="360" style="display: block; margin: auto;" /&gt;&lt;img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="360" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -380,7 +430,7 @@ ggplot(mpg, aes(hwy, drv)) +
   geom_point()
 ```
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-17-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]
 
 --
@@ -397,7 +447,7 @@ ggplot(mpg, aes(hwy, drv)) +
   )
 ```
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-18-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -409,15 +459,29 @@ A **scale** controls how variables are mapped to aesthetics.
 A **guide** is the inverse of a scale, showing how to read the scale.
 
 
+```r
+p &lt;- ggplot(msleep, aes(brainwt, sleep_total)) +
+  geom_point()
+```
 
 .pull-left[
-&lt;img src="intro_files/figure-html/unnamed-chunk-19-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
+
+```r
+p # + scale_x_continuous()
+```
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
 ]
 
 --
 
 .pull-right[
-&lt;img src="intro_files/figure-html/unnamed-chunk-20-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
+
+```r
+p + scale_x_log10()
+```
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-21-1.png" width="316.8" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -428,16 +492,32 @@ A **guide** is the inverse of a scale, showing how to read the scale.
 Coordinate systems control the position of geoms in the plot.
 
 
+```r
+# cartesian coordinates (bar chart)
+mutate(mpg, cyl = factor(cyl)) |&gt;
+  ggplot(aes(x = cyl, fill = cyl)) +
+  geom_bar(show.legend = FALSE) +
+* coord_cartesian() +
+  ggtitle("cartesian")
+```
 
 
+```r
+# polar coordinates (pie chart)
+mutate(mpg, cyl = factor(cyl)) |&gt;
+  ggplot(aes(x = "1", fill = cyl)) +
+  geom_bar(width = 1) +
+* coord_polar(theta = "y") +
+  ggtitle("polar")
+```
 
 
 ]
 
 .pull-right-40[
-&lt;img src="intro_files/figure-html/unnamed-chunk-23-1.png" width="252" style="display: block; margin: auto;" /&gt;
-
 &lt;img src="intro_files/figure-html/unnamed-chunk-24-1.png" width="252" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="intro_files/figure-html/unnamed-chunk-25-1.png" width="252" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -449,6 +529,12 @@ Facets plots small multiples in separate facets (panels).
 ggplot2 provides `facet_grid()` and `facet_wrap()`.
 
 
+```r
+d &lt;- as_tibble(Titanic) |&gt;
+  pivot_wider(names_from = Survived, values_from = n) |&gt;
+  group_by(Class, Sex) |&gt;
+  summarise(survival_rate = sum(Yes)/sum(Yes + No))
+```
 
 .pull-left[
 
@@ -464,7 +550,7 @@ ggplot(
 ]
 
 .pull-right[
-&lt;img src="intro_files/figure-html/unnamed-chunk-26-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-27-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -477,17 +563,37 @@ tiresome.
 
 Thankfully, the grammar of graphics (and ggplot2) comes with a **hierarchy of defaults**.
 
-&lt;img src="intro_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="intro_files/figure-html/unnamed-chunk-28-1.png" width="360" style="display: block; margin: auto;" /&gt;
 ]
 
 --
 
 .pull-right[
 
+```r
+ggplot(diamonds, 
+       aes(carat, price)) +
+  geom_point()
+```
 
 is equivalent to
 
 
+```r
+ggplot(diamonds, 
+       aes(carat, price)) +
+  layer(
+    data = diamonds, 
+    mapping = aes(x = carat, 
+                  y = price),
+    geom = "point", 
+    stat = "identity", 
+    position = "identity"
+  ) +
+  scale_y_continuous() +
+  scale_x_continuous() +
+  coord_cartesian()
+```
 ]
 
 ---
