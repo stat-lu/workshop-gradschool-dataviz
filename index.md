@@ -13,7 +13,13 @@ how to download and install these.
 
 ### Thursday
 
-- [Introduction](slides/intro) ([practice](practice/intro))
+#### Introduction
+
+- [Slides](slides/intro)
+- [Practice](practice/intro)
+
+#### One Variable and Data-Ink
+
 - [One Variable and Data-Ink](slides/one-variable-and-data-ink) ([practice](practice/one-variable))
 - [Two Variables and Scales](slides/two-variables-and-scales) ([practice](practice/two-variables-and-scales))
 
