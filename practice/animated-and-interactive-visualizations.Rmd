@@ -2,6 +2,7 @@
 title: "Practice: Introduction to ggplot2"
 subtitle: "Data Visualization with R and ggplot2"
 author: "Johan Larsson"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   bookdown::html_document2:
     toc: true

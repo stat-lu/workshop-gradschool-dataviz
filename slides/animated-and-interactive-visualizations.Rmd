@@ -3,7 +3,7 @@ title: "Animated and Interactive Visualizations"
 subtitle: "Data Visualization with R and ggplot2"
 author: "Johan Larsson (Department of Statistics)"
 institute: "Graduate School at the Faculty of Social Sciences"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   xaringan::moon_reader:
     css: [default, "assets/styles.css"]

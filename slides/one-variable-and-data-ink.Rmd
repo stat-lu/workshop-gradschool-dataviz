@@ -3,7 +3,7 @@ title: "One Variable and Data-Ink"
 subtitle: "Data Visualization with R and ggplot2"
 author: "Johan Larsson (Department of Statistics)"
 institute: "Graduate School at the Faculty of Social Sciences"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 bibliography: "assets/references.bib"
 output:
   xaringan::moon_reader:
