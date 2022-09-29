@@ -21,7 +21,5 @@ how to download and install these.
 
 - [Categorical Data and Color](slides/categorical-data-and-color) ([practice](practice/categorical-data-and-color))
 - [Multivariate Data](slides/multivariate-data) ([practice](practice/multivariate-data))
+- [Animated and Interactive Visualizations](slides/animated-and-interactive-visualizations) ([practice](practice/animated-and-interactive-visualizations))
 
-#### Introduction
-
-### Friday
