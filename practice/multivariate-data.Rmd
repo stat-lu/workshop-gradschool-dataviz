@@ -80,7 +80,7 @@ ggplot(starwars, aes(height, mass, color = sex, label = name)) +
 but the `geom_text_repel()` function from **ggrepel** automatically avoids
 overlap in the plot, which is often very useful.*
 
-# Adding Labels only to Some Observations
+# Adding Labels Only to Some Observations
 
 The plot nicely connects names to the points but is kind of messy. For data sets
 where this happens, it might be worthwhile to consider whether it's possible to
@@ -121,12 +121,9 @@ ggplot(starwars2, aes(height, mass, color = sex, label = highlight)) +
   geom_text_repel()
 ```
 
-Which character has the largest mass in the `NA` group?
-
-- Sly Moore [correct]
-- Grievous
-- IG-88
-- Beru Whitesun lars
+As a bonus exercise, try to filter out the observations in `high_mass`
+from the original data set and use separate `geom_point()` layers
+for the two data sets, using different aesthetics for the two.
 
 # Faceting
 
@@ -145,9 +142,7 @@ starwars3 <-
 Now create a new scatter plot, again with mass against height on the x and y
 axes, but with facets corresponding to `gender` (note: not sex) and `films`.
 Keep the scale transformation you used previously (logarithmic). You can also
-keep the labels you used in your previous plot or, if you want a bonus task,
-create new labels using the method above to highlight the heaviest character for
-each film and gender.
+keep the labels you used in your previous plot.
 
 Note that you can use both `facet_wrap()` and `facet_grid()` here. Try out both
 and compare the results.
@@ -196,7 +191,6 @@ then color the bubbles in your plot based on this variable.
 swiss3 <-
   swiss2 %>%
   mutate(Religion = ifelse(Catholic >= 50, "Catholic", "Protestant"))
-
 ```
 
 ```{r include = FALSE}
@@ -208,10 +202,8 @@ ggplot(
   geom_text_repel()
 ```
 
-Which catholic province has the lowest proportion of workers working in
-agriculture?
-
-- Rive Gauche
+Can you figure out which catholic province has the lowest proportion of workers
+working in agriculture?
 
 ## Bonus: Ternary Plots
 
@@ -220,11 +212,11 @@ display and are useful for compositional data when three features (variables)
 sum to a constant, typically 1 (100%). They are common when studying geological
 features, such as samples of rocks, when each sample is comprised of three
 different types of minerals, for example.
-
 To plot ternary plots with ggplot2, load the **ggtern** package, which you
 should have installed by now.
 
 ```{r}
+# install.package("ggtern")
 library(ggtern)
 ```
 
@@ -235,23 +227,21 @@ is a wrapper to the latter, which provides a coordinate transformation that is
 necessary to get reasonable results.
 
 Then, to produce the plot, map `An` to the x axis, `Ab` to the y axis, and `Or`
-to the z axis. Also map color to the feldspar variety (`Feldspar`).
+to the z axis.
 
 ```{r include = FALSE}
 data(Feldspar)
 
-ggtern(Feldspar, aes(An, Ab, z = Or, col = Feldspar)) +
+ggtern(Feldspar, aes(An, Ab, z = Or)) +
     geom_point()
 ```
 
 The resulting plot shows, for each sample of feldspar, its composition in terms
 of the three constituents `Ab`, `Or`, and `An`, which represents chemical
-compounds. To read the individual values for any point, you read the chart along
-the diagonal or horizontal grid lines. Note also that the labels for the
-components are positioned such that a observation close to it indicates that it
-contains a lot of that component.
+compounds. To read the individual values for any point, you read the chart
+along the diagonal or horizontal grid lines (see fore information about this at
+[this Wikipedia page](https://en.wikipedia.org/wiki/Ternary_plot).
 
-What is (roughly) the highest value of `Or` that any Feldspar in the group
-"Plagioclase" takes? (A margin of +- 5 is tolerated).
-
-- 20 (+- 5)
+**ggtern** works exactly like other ggplots, so you can add and modify layers 
+in exactly the same fashion. There is a categorical variable called
+ `Feldspar` in the data. Try to map it to color, shape or create facets from it.

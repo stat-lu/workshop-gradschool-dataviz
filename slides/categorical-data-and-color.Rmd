@@ -203,7 +203,7 @@ ggplot(happiness_bins, aes(work, n, fill = work)) +
 
 ## Pay Attention to Mappings
 
-choice of mappings is critical when dealing with categorical data!
+Choice of mappings is critical when dealing with categorical data!
 
 ```{r, fig.width = 7, fig.height = 4}
 ggplot(happiness, aes(happy, fill = gender)) + #<<
@@ -215,9 +215,9 @@ ggplot(happiness, aes(happy, fill = gender)) + #<<
 
 ## Ordering
 
-if variable is ordinal: just format it as an ordered factor
+If variable is ordinal, just format it as an ordered factor.
 
-if variable is **not** ordinal: consider ordering it manually!
+If variable is **not** ordinal: consider ordering it manually!
 
 ```{r, fig.width = 10, fig.height = 3.5}
 # no ordering
@@ -232,9 +232,9 @@ happiness |>
 
 ## Ordering
 
-if variable is ordinal: just format it as an ordered factor
+If variable is ordinal: just format it as an ordered factor
 
-if variable is **not** ordinal: consider ordering it manually!
+If variable is **not** ordinal: consider ordering it manually!
 
 ```{r, fig.width = 10, fig.height = 3.5}
 happiness |>
@@ -257,7 +257,7 @@ class: section-title
 
 How do we choose colors appropriately?
 
-You need to pay attention to data type!
+First, you need to pay attention to data type!
 
 --
 
@@ -328,7 +328,7 @@ Emphasis on low, mid, and high ends
 ## Natural Color Mappings
 
 The type of data sometimes implies a natural color mapping: temperature, geographical features,
-political affiliation
+political affiliation.
 
 ```{r, out.width = "70%", echo = FALSE, fig.cap = "Forest cover in Europe (www.eea.europa.eu)."}
 knitr::include_graphics("images/europe-forest.png")
@@ -336,19 +336,16 @@ knitr::include_graphics("images/europe-forest.png")
 
 ---
 
-## ggplot2
+## Color Scales in ggplot2
 
-ggplot2 tries to **guess** which color palette to use
+ggplot2 tries to **guess** which color palette to use.
 
-- ordinal and numerical variables are mapped to a **sequential** palette
-- unordered categorical variables are mapped to a **qualitative** palette
+- Ordinal and numerical variables are mapped to a **sequential** palette.
+- Unordered categorical variables are mapped to a **qualitative** palette.
 
-but ggplot2 never knows when to map a variable a **diverging** palette, or which
-direction of values indicate strongest intensity
+But ggplot2 never knows when to map a variable a **diverging** palette, or which
+direction of values indicate strongest intensity!
 
---
-
-### Applying a Color Palette in ggplot2
 
 - `scale_color_*` for color mappings (`geom_point()`, `geom_line()` etc)
 - `scale_fill_*` for fill mappings (`geom_col()`, `geom_tile()` etc etc)
@@ -357,9 +354,9 @@ direction of values indicate strongest intensity
 
 ## The colorspace Package
 
-The names and effects of the color scale functions in ggplot2 are not
+The names and effects of the color scale functions in ggplot2 are less than
 ideal. The [colorspace](https://cran.r-project.org/package=colorspace) package
-has much better syntax.
+has better syntax.
 
 `scale_<aesthetic>_<datatype>_<colorscale>()`
 
@@ -368,15 +365,13 @@ has much better syntax.
 - `scale_color_discrete_qualitative()`
 - `scale_fill_continuous_sequential()`
 - `scale_color_continuous_diverging()`
-- `scale_color_discrete_divergingx()` 
-
-The `*_divergingx()` palettes provide more flexible diverging palettes.
+- `scale_color_discrete_divergingx()` (more flexible)
 
 ---
 
 ## Sequential Palettes
 
-used for data that is ordered low to high
+Used for data that is ordered low to high
 
 **examples:** population count, quality rating, size
 
@@ -391,7 +386,7 @@ ggplot(diamonds, aes(price, fill = cut)) +
 
 ## Diverging Palettes
 
-equal emphasis on middle and low and high ends of scale
+Equal emphasis on middle and low and high ends of scale
 
 **examples:** temperature (celsius), budget balance, correlations
 
@@ -415,7 +410,7 @@ ggplot(mtcars_cor, aes(var1, var2, fill = cor)) +
 
 ## Qualitative Palettes
 
-colors should be as distinct as possible and not signal differences in magnitude
+Colors should be as distinct as possible and not signal differences in magnitude
 
 **examples:** political party affiliation, gender
 
@@ -637,12 +632,6 @@ cvdPlot(p, c("origin", "desaturate"))
 ```{r echo = FALSE}
 knitr::include_graphics("images/chessboard-animated.gif")
 ```
-
----
-
-## Accessibility
-
-Remember that there are other accessibility concerns too!
 
 ---
 

@@ -28,7 +28,27 @@ how to download and install these.
 - [Slides](slides/two-variables-and-scales)
 - [Practice](practice/two-variables-and-scales)
 
+### Friday
+
 #### Categorical Data and Color
 
 - [Slides](slides/categorical-data-and-color)
 - [Practice](practice/categorical-data-and-color)
+
+#### Multivariate Data
+
+- [Slides](slides/categorical-data-and-color)
+- [Practice](practice/categorical-data-and-color)
+
+#### Animated and Interactive Visualizations
+
+- [Slides](slides/categorical-data-and-color)
+- [Practice](practice/categorical-data-and-color)
+
+#### Explore a Dataset
+
+- [Practice](practice/explore-a-dataset)
+
+#### Wrap-Up
+
+- [Slides](slides/wrap-up)
