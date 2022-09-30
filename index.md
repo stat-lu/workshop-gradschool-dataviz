@@ -49,6 +49,6 @@ how to download and install these.
 
 - [Practice](practice/explore-a-dataset)
 
-#### Wrap-Up
+#### Wrapping-Up
 
-- [Slides](slides/wrap-up)
+- [Slides](slides/wrapping-up)

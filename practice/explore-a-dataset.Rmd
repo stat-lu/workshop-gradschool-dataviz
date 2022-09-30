@@ -1,0 +1,56 @@
+---
+title: "Practice: Explore a Dataset"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    highlight: pygments
+    global_numbering: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  cache      = FALSE,
+  fig.width  = 5,
+  fig.height = 4,
+  dev        = "png"
+)
+
+options(scipen = 999)
+
+library(tidyverse)
+```
+
+# Overview
+
+In this, final, session, you'll work with a data set of your choosing,
+trying to employ some of the tools you've learned to make sense of 
+the patterns in the data.
+
+If you have your own data set that's (reasonably) tidy, then great! You
+can use that.
+
+Otherwise, use an existing data set. The [Ecdat](https://cran.r-project.org/web/packages/Ecdat/index.html) and [carData](https://cran.r-project.org/web/packages/carData/index.html) packages are great sources for data sets.
+
+Here are some data sets that you might find interesting:
+
+From **Ecdat**:
+
+- `BudgetFood`: Budget share of food for Spanish households from 1980
+- `Cigar`: Cigarette consumption from the US between 1963 and 1992
+- `Fatality`: Drunk-driving laws and traffic deaths from the US between 1982
+  and 1988
+
+From **carData**:
+
+- `Arrests`: Arrests for Marijuana possession
+- `Chile`: Voting intentions in the 1988 Chilean plebiscite
+- `UN98`: United Nations Social Indicators Data from 1998
+
+But there are many more, so check out the documentation or the
+packages if you want to use something else.
