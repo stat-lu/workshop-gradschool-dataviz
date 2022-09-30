@@ -4,7 +4,7 @@
     <title>Two Variables and Scales</title>
     <meta charset="utf-8" />
     <meta name="author" content="Johan Larsson (Department of Statistics)" />
-    <meta name="date" content="2022-09-29" />
+    <meta name="date" content="2022-09-30" />
     <script src="libs/header-attrs-2.16/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <script src="libs/mark.js-8.11.1/mark.min.js"></script>
@@ -30,7 +30,7 @@ class: middle, center, title-slide
 ### Graduate School at the Faculty of Social Sciences
 ]
 .date[
-### 29 september 2022
+### 30 september 2022
 ]
 
 ---
@@ -126,7 +126,7 @@ are taken at irregular intervals or seldom
 
 
 ```r
-filter(ChickWeight, Chick == 5) %&gt;%
+filter(ChickWeight, Chick == 5) |&gt;
   ggplot(aes(Time, weight)) +
 * geom_point() +
 * geom_line()

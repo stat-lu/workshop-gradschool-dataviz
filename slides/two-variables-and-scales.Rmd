@@ -114,7 +114,7 @@ d <- tibble(
   clusters = y_clust
 )
 
-d_long <- pivot_longer(d, -x) %>%
+d_long <- pivot_longer(d, -x) |>
   mutate(name = fct_relevel(name, "noise", "linear", "nonlinear", "clusters"))
 
 ggplot(d_long, aes(x, value, group = name)) +
@@ -137,7 +137,7 @@ d <- tibble(x = 1:100,
             low_variance = x + rnorm(100, 0, 4),
             high_variance = x + rnorm(100, 0, 20))
 
-pivot_longer(d, -x) %>%
+pivot_longer(d, -x) |>
   ggplot(aes(x, value, group = name)) +
   geom_point() +
   ylab("y") +
@@ -184,7 +184,7 @@ often useful to combine points and lines when measurements
 are taken at irregular intervals or seldom
 
 ```{r, fig.cap = "Weight of a chick over time.", fig.width = 6, fig.height = 3.3}
-filter(ChickWeight, Chick == 5) %>%
+filter(ChickWeight, Chick == 5) |>
   ggplot(aes(Time, weight)) +
   geom_point() + #<<
   geom_line() #<<
@@ -211,7 +211,7 @@ Pay attention to whether or not the factor is **ordered**.
 
 .pull-left[
 ```{r, echo = FALSE, fig.height = 6}
-mutate(OrchardSprays, treatment = fct_shuffle(treatment)) %>%
+mutate(OrchardSprays, treatment = fct_shuffle(treatment)) |>
   ggplot(aes(treatment, decrease)) +
   geom_boxplot()
 ```
@@ -377,18 +377,18 @@ library(maps)
 library(mapproj)
 
 arrests <-
-  USArrests %>%
-  rownames_to_column("state") %>%
+  USArrests |>
+  rownames_to_column("state") |>
   mutate(state = tolower(state))
 
 states_data <- 
-  as.data.frame(state.x77) %>%
-  rownames_to_column("State") %>%
-  as_tibble() %>%
-  mutate(State = tolower(State)) %>%
+  as.data.frame(state.x77) |>
+  rownames_to_column("State") |>
+  as_tibble() |>
+  mutate(State = tolower(State)) |>
   filter(State != "alaska" & State != "hawaii")
 
-states_map <- map_data("state") %>%
+states_map <- map_data("state") |>
   filter(region != "district of columbia")
 
 ggplot(states_data, aes(map_id = State)) +

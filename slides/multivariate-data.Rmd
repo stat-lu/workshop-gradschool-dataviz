@@ -151,7 +151,7 @@ update(p[c(1, 1, 1)],
 Color is often a good choice, especially with categorical variables.
 
 ```{r, fig.height = 3.8, fig.width = 5}
-mtcars <- rownames_to_column(mtcars, "name") %>%
+mtcars <- rownames_to_column(mtcars, "name") |>
   mutate_at(vars(cyl, gear), as.factor)
 
 ggplot(mtcars, aes(disp, hp, color = cyl)) + #<<
@@ -168,10 +168,10 @@ a grid format.
 
 ```{r, echo = FALSE}
 volcano_long <- 
-  as_tibble(volcano) %>%
-  rename_all(~as.character(1:ncol(volcano))) %>%
-  rowid_to_column("longitude") %>%
-  gather("latitude", "height", -longitude) %>%
+  as_tibble(volcano) |>
+  rename_all(~as.character(1:ncol(volcano))) |>
+  rowid_to_column("longitude") |>
+  gather("latitude", "height", -longitude) |>
   mutate(latitude = as.numeric(latitude))
 ```
 
@@ -252,7 +252,7 @@ Mapping to width can be useful but has few use cases
 
 ```{r, echo = FALSE}
 troops <- read.table("data/troops.txt",
-                     header = TRUE) %>%
+                     header = TRUE) |>
   mutate(direction = factor(direction),
          group = factor(group))
 ```
@@ -292,7 +292,7 @@ to text (`geom_text_repel()`)
 ```{r sleep, eval = FALSE}
 library(ggrepel)
 
-head(msleep, 15) %>%
+head(msleep, 15) |>
   ggplot(aes(brainwt, 
              sleep_total, 
              label = name)) +
@@ -356,8 +356,8 @@ If sacrificing detail is OK, you can facet by transforming a continuous
 variable into an ordinal one.
 
 ```{r, fig.width = 10, fig.height = 3.6}
-mtcars %>%
-  mutate(hp_cat = cut_interval(hp, 3)) %>% #<<
+mtcars |>
+  mutate(hp_cat = cut_interval(hp, 3)) |> #<<
   ggplot(aes(mpg, disp)) +
     geom_point() +
     facet_wrap(vars(hp_cat), labeller = "label_both")
@@ -371,7 +371,7 @@ Putting together these building blocks allows us to create interesting and compl
 visualizations.
 
 ```{r, fig.width = 10, fig.height = 4}
-tail(mtcars, 15) %>%
+tail(mtcars, 15) |>
   ggplot(aes(hp, wt, color = cyl, label = name)) +
     geom_point() +
     geom_text_repel() +

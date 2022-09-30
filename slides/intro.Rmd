@@ -94,11 +94,11 @@ class: center, middle
 swe_employment <- readRDS("data/swe_employment.rds")
 
 tmp <- select(swe_employment, region, employment)
-tmp[!duplicated(tmp), ] %>%
-  as_tibble() %>%
-  arrange(desc(employment)) %>%
-  rename("employment (%)" = employment) %>%
-  kable() %>%
+tmp[!duplicated(tmp), ] |>
+  as_tibble() |>
+  arrange(desc(employment)) |>
+  rename("employment (%)" = employment) |>
+  kable() |>
   kable_styling(font_size = 13)
 ```
 ]
@@ -130,8 +130,8 @@ class: section-title
 ```{r, fig.width = 9, fig.height = 7, echo = FALSE}
 library(gapminder)
 
-gapminder %>%
-  pivot_longer(c("lifeExp", "gdpPercap")) %>%
+gapminder |>
+  pivot_longer(c("lifeExp", "gdpPercap")) |>
   ggplot(aes(year, value, colour = country)) +
     geom_line(show.legend = FALSE) +
     scale_colour_manual(values = country_colors) +
@@ -144,8 +144,8 @@ gapminder %>%
 ## Transforming the axis
 
 ```{r, fig.width = 9, fig.height = 7, echo = FALSE}
-gapminder %>%
-  pivot_longer(c("lifeExp", "gdpPercap")) %>%
+gapminder |>
+  pivot_longer(c("lifeExp", "gdpPercap")) |>
   ggplot(aes(year, value, colour = country)) +
   geom_line(show.legend = FALSE) +
   scale_y_log10() +
@@ -158,8 +158,8 @@ gapminder %>%
 ## Grouping time, adding population
 
 ```{r, fig.width = 9, fig.height = 7, echo = FALSE}
-gapminder %>%
-  mutate(year = cut(year, 9)) %>%
+gapminder |>
+  mutate(year = cut(year, 9)) |>
   ggplot(aes(gdpPercap,
              lifeExp,
              colour = country,

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Johan Larsson" />
 
-<meta name="date" content="2022-09-29" />
+<meta name="date" content="2022-09-30" />
 
 <title>Practice: Two Variables and Scales</title>
 
@@ -337,7 +337,7 @@ div.tocify {
 <h1 class="title toc-ignore">Practice: Two Variables and Scales</h1>
 <h3 class="subtitle">Data Visualization with R and ggplot2</h3>
 <h4 class="author">Johan Larsson</h4>
-<h4 class="date">29 september 2022</h4>
+<h4 class="date">30 september 2022</h4>
 
 </div>
 
@@ -400,7 +400,7 @@ accordingly.)</p>
 time series.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>nile <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Nile) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>nile <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(Nile) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> index, <span class="at">flow =</span> value)</span></code></pre></div>
 <p>Read the documentation for the Nile data set and then construct
 a plot to investigate the flow of the river across time.

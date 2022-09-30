@@ -58,8 +58,8 @@ in which we rename and re-code some of the variables.
 
 ```{r}
 titanic <-
-  as_tibble(titanic_train) %>%
-  select(PassengerId, Class = Pclass, Sex, Age, Survived) %>%
+  as_tibble(titanic_train) |>
+  select(PassengerId, Class = Pclass, Sex, Age, Survived) |>
   mutate(
     Age = as_factor(ifelse(Age < 18, "Chid", "Adult")),
     Survived = as_factor(ifelse(Survived, "Yes", "No"))

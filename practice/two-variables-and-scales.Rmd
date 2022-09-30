@@ -103,7 +103,7 @@ mpg2 <- mutate(mpg, cyl = as_factor(cyl))
 ```
 
 ```{r include = FALSE}
-mutate(mpg, cyl = as_factor(cyl)) %>%
+mutate(mpg, cyl = as_factor(cyl)) |>
   ggplot(aes(cyl, hwy)) +
     geom_boxplot()
 ```
@@ -118,7 +118,7 @@ time series.
 ```{r}
 library(tsibble)
 
-nile <- as_tsibble(Nile) %>%
+nile <- as_tsibble(Nile) |>
   rename(year = index, flow = value)
 ```
 

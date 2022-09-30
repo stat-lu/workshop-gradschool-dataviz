@@ -4,13 +4,17 @@
     <title>Animated and Interactive Visualizations</title>
     <meta charset="utf-8" />
     <meta name="author" content="Johan Larsson (Department of Statistics)" />
-    <meta name="date" content="2022-09-29" />
+    <meta name="date" content="2022-09-30" />
     <script src="libs/header-attrs-2.16/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <script src="libs/mark.js-8.11.1/mark.min.js"></script>
-    <link href="libs/xaringanExtra-search-0.0.1/search.css" rel="stylesheet" />
-    <script src="libs/xaringanExtra-search-0.0.1/search.js"></script>
-    <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":true,"autoSearch":true}) })</script>
+    <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+    <script src="libs/typedarray-0.1/typedarray.min.js"></script>
+    <script src="libs/jquery-3.5.1/jquery.min.js"></script>
+    <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="assets/styles.css" type="text/css" />
   </head>
   <body>
@@ -30,7 +34,7 @@ class: middle, center, title-slide
 ### Graduate School at the Faculty of Social Sciences
 ]
 .date[
-### 29 september 2022
+### 30 september 2022
 ]
 
 ---
@@ -40,12 +44,11 @@ class: middle, center, title-slide
 
 ## Animated Visualizations
 
-offers an extra aesthetic that we can map
-variables to
+Offers an extra aesthetic that we can map variables to
 
-very useful in **presentations**
+Very useful for **presentations** and **webpages**!
 
-Animating works best when mapping to time or similar process.
+Animating works best when mapping to time (or similar process).
 
 --
 
@@ -55,15 +58,13 @@ Animating works best when mapping to time or similar process.
 [gganimate](https://gganimate.com/) is a ggplot-based solution for producing
 animations in R.
 
-You may need to download and install a
-**renderer**; we recommend [gifski](https://gif.ski/).
+You may need to download and install a **renderer**; I recommend
+[gifski](https://gif.ski/).
 ]
 
 .pull-right-40[
 &lt;img src="images/gganimate.svg" width="50%" style="display: block; margin: auto;" /&gt;
-
 ]
-
 
 ---
 
@@ -74,8 +75,8 @@ Start with some data.
 
 ```r
 # aggregate over years
-tx &lt;- select(txhousing, city, year, sales:inventory) %&gt;%
-  group_by(city, year) %&gt;%
+tx &lt;- select(txhousing, city, year, sales:inventory) |&gt;
+  group_by(city, year) |&gt;
   summarize_all(mean, na.rm = TRUE)
 ```
 
@@ -84,10 +85,12 @@ Then build a basic ggplot.
 
 
 ```r
-p &lt;- tx %&gt;%
-  ggplot(aes(median, 
-             listings)) +
-    geom_point(alpha = 0.5)
+p &lt;- tx |&gt;
+  ggplot(aes(
+    median,
+    listings
+  )) +
+  geom_point(alpha = 0.5)
 p
 ```
 ]
@@ -98,7 +101,6 @@ p
 &lt;p class="caption"&gt;Median sales price and numbers of listings.&lt;/p&gt;
 &lt;/div&gt;
 ]
-
 
 ---
 
@@ -123,7 +125,7 @@ anim # same as animate(anim)
 ]
 
 .pull-right[
-&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-4-1.gif" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-4-1.gif" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -131,7 +133,7 @@ anim # same as animate(anim)
 
 ### Labeling
 
-uses special **glue** syntax inside `labs()`
+Use the special **glue** syntax inside `labs()` to add animated labels.
 
 
 ```r
@@ -140,7 +142,7 @@ anim2 &lt;- anim +
 anim2
 ```
 
-&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-5-1.gif" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-5-1.gif" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -154,26 +156,26 @@ Use `animate()` directly for more control over the animation.
 *animate(anim2, duration = 20, nframes = 150)
 ```
 
-&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-6-1.gif" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="animated-and-interactive-visualizations_files/figure-html/unnamed-chunk-7-1.gif" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Interactive Visualizations
 
-great for most datasets, particularly complicated datasets, but can
+Great for most datasets, particularly complicated datasets, but can
 only really be used on webpages
 
-often useful in tandem with carefully designed static visualizations
+Often useful in tandem with carefully designed static visualizations
 
 .pull-left[
 ### plotly
 
 Simple interactive visualizations can be achieved easily using [plotly](https://plotly.com/).
 
-two alternatives: 
+Two alternatives: 
 
-- call `plot_ly()` directly
-- use `ggplotly()` on a plot built in ggplot2
+- Call `plot_ly()` directly
+- Use `ggplotly()` on a plot built in ggplot2
 
 We focus on the second alternative.
 ]
@@ -187,24 +189,39 @@ We focus on the second alternative.
 
 ```r
 library(plotly)
-p &lt;- ggplot(msleep, aes(brainwt, sleep_total, color = vore, 
-                        genus = genus, 
-                        conservation = conservation)) +
+p &lt;- ggplot(msleep, aes(brainwt, sleep_total,
+  color = vore,
+  genus = genus,
+  conservation = conservation
+)) +
   geom_point() +
   scale_x_log10()
 *ggplotly(p)
 ```
 
-&lt;img src="videos/plotly-animation1.gif" width="83%" style="display: block; margin: auto;" /&gt;
+<div id="htmlwidget-598c4a7488bfe6c95b39" style="width:720px;height:374.4px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-598c4a7488bfe6c95b39">{"x":{"data":[{"x":[null,null,-1.15490195998574,-1.96657624451305,-1.59176003468815,null,-0.488116639021126,null,-1.90308998699194,null,null,-0.804100347590766,null,null,null,null,-1.75696195131371,-1.35163998901907,-1.29756946355447],"y":[12.1,8.7,10.1,17.4,12.5,2.7,6.2,19.4,11,14.5,15.8,10.4,13.5,3.5,5.6,5.2,6.3,12.5,9.8],"text":["brainwt:      NA<br />sleep_total: 12.1<br />vore: carni<br />genus: Acinonyx<br />conservation: lc","brainwt:      NA<br />sleep_total:  8.7<br />vore: carni<br />genus: Callorhinus<br />conservation: vu","brainwt: 0.07000<br />sleep_total: 10.1<br />vore: carni<br />genus: Canis<br />conservation: domesticated","brainwt: 0.01080<br />sleep_total: 17.4<br />vore: carni<br />genus: Dasypus<br />conservation: lc","brainwt: 0.02560<br />sleep_total: 12.5<br />vore: carni<br />genus: Felis<br />conservation: domesticated","brainwt:      NA<br />sleep_total:  2.7<br />vore: carni<br />genus: Globicephalus<br />conservation: cd","brainwt: 0.32500<br />sleep_total:  6.2<br />vore: carni<br />genus: Haliochoerus<br />conservation: lc","brainwt:      NA<br />sleep_total: 19.4<br />vore: carni<br />genus: Lutreolina<br />conservation: lc","brainwt: 0.01250<br />sleep_total: 11.0<br />vore: carni<br />genus: Nyctibeus<br />conservation: NA","brainwt:      NA<br />sleep_total: 14.5<br />vore: carni<br />genus: Onychomys<br />conservation: lc","brainwt:      NA<br />sleep_total: 15.8<br />vore: carni<br />genus: Panthera<br />conservation: en","brainwt: 0.15700<br />sleep_total: 10.4<br />vore: carni<br />genus: Panthera<br />conservation: nt","brainwt:      NA<br />sleep_total: 13.5<br />vore: carni<br />genus: Panthera<br />conservation: vu","brainwt:      NA<br />sleep_total:  3.5<br />vore: carni<br />genus: Phoca<br />conservation: vu","brainwt:      NA<br />sleep_total:  5.6<br />vore: carni<br />genus: Phocoena<br />conservation: vu","brainwt:      NA<br />sleep_total:  5.2<br />vore: carni<br />genus: Tursiops<br />conservation: NA","brainwt: 0.01750<br />sleep_total:  6.3<br />vore: carni<br />genus: Genetta<br />conservation: NA","brainwt: 0.04450<br />sleep_total: 12.5<br />vore: carni<br />genus: Vulpes<br />conservation: NA","brainwt: 0.05040<br />sleep_total:  9.8<br />vore: carni<br />genus: Vulpes<br />conservation: NA"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"carni","legendgroup":"carni","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[null,-0.373659632624958,null,-1.00788851221305,-0.939302159646388,-2.25963731050576,-2.19382002601611,-1.9100948885606,0.663040974893974,-0.183758700008217,-0.377785977033705,null,null,-1.911155437273,null,0.756788198768118,null,-3,null,-3.39794000867204,null,null,-1.91721462968355,-0.756961951313706,null,-2.72124639904717,-2.92811799269387,-2.24412514432751,-2.39794000867204,null,null,-0.772113295386326],"y":[14.4,4,14.4,3,5.3,9.4,12.5,5.3,3.9,2.9,3.1,14.9,1.9,6.3,9.5,3.3,14.2,14.3,12.8,12.5,14.6,7.7,8.4,3.8,11.1,13,11.3,16.6,13.8,15.9,15.8,4.4],"text":["brainwt:      NA<br />sleep_total: 14.4<br />vore: herbi<br />genus: Aplodontia<br />conservation: nt","brainwt: 0.42300<br />sleep_total:  4.0<br />vore: herbi<br />genus: Bos<br />conservation: domesticated","brainwt:      NA<br />sleep_total: 14.4<br />vore: herbi<br />genus: Bradypus<br />conservation: NA","brainwt: 0.09820<br />sleep_total:  3.0<br />vore: herbi<br />genus: Capreolus<br />conservation: lc","brainwt: 0.11500<br />sleep_total:  5.3<br />vore: herbi<br />genus: Capri<br />conservation: lc","brainwt: 0.00550<br />sleep_total:  9.4<br />vore: herbi<br />genus: Cavis<br />conservation: domesticated","brainwt: 0.00640<br />sleep_total: 12.5<br />vore: herbi<br />genus: Chinchilla<br />conservation: domesticated","brainwt: 0.01230<br />sleep_total:  5.3<br />vore: herbi<br />genus: Dendrohyrax<br />conservation: lc","brainwt: 4.60300<br />sleep_total:  3.9<br />vore: herbi<br />genus: Elephas<br />conservation: en","brainwt: 0.65500<br />sleep_total:  2.9<br />vore: herbi<br />genus: Equus<br />conservation: domesticated","brainwt: 0.41900<br />sleep_total:  3.1<br />vore: herbi<br />genus: Equus<br />conservation: domesticated","brainwt:      NA<br />sleep_total: 14.9<br />vore: herbi<br />genus: Eutamias<br />conservation: NA","brainwt:      NA<br />sleep_total:  1.9<br />vore: herbi<br />genus: Giraffa<br />conservation: cd","brainwt: 0.01227<br />sleep_total:  6.3<br />vore: herbi<br />genus: Heterohyrax<br />conservation: lc","brainwt:      NA<br />sleep_total:  9.5<br />vore: herbi<br />genus: Lemur<br />conservation: vu","brainwt: 5.71200<br />sleep_total:  3.3<br />vore: herbi<br />genus: Loxodonta<br />conservation: vu","brainwt:      NA<br />sleep_total: 14.2<br />vore: herbi<br />genus: Meriones<br />conservation: lc","brainwt: 0.00100<br />sleep_total: 14.3<br />vore: herbi<br />genus: Mesocricetus<br />conservation: en","brainwt:      NA<br />sleep_total: 12.8<br />vore: herbi<br />genus: Microtus<br />conservation: NA","brainwt: 0.00040<br />sleep_total: 12.5<br />vore: herbi<br />genus: Mus<br />conservation: nt","brainwt:      NA<br />sleep_total: 14.6<br />vore: herbi<br />genus: Neofiber<br />conservation: nt","brainwt:      NA<br />sleep_total:  7.7<br />vore: herbi<br />genus: Octodon<br />conservation: lc","brainwt: 0.01210<br />sleep_total:  8.4<br />vore: herbi<br />genus: Oryctolagus<br />conservation: domesticated","brainwt: 0.17500<br />sleep_total:  3.8<br />vore: herbi<br />genus: Ovis<br />conservation: domesticated","brainwt:      NA<br />sleep_total: 11.1<br />vore: herbi<br />genus: Potorous<br />conservation: NA","brainwt: 0.00190<br />sleep_total: 13.0<br />vore: herbi<br />genus: Rattus<br />conservation: lc","brainwt: 0.00118<br />sleep_total: 11.3<br />vore: herbi<br />genus: Sigmodon<br />conservation: NA","brainwt: 0.00570<br />sleep_total: 16.6<br />vore: herbi<br />genus: Spermophilus<br />conservation: lc","brainwt: 0.00400<br />sleep_total: 13.8<br />vore: herbi<br />genus: Spermophilus<br />conservation: lc","brainwt:      NA<br />sleep_total: 15.9<br />vore: herbi<br />genus: Spermophilus<br />conservation: lc","brainwt:      NA<br />sleep_total: 15.8<br />vore: herbi<br />genus: Tamias<br />conservation: NA","brainwt: 0.16900<br />sleep_total:  4.4<br />vore: herbi<br />genus: Tapirus<br />conservation: vu"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"herbi","legendgroup":"herbi","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-3.52287874528034,-3.60205999132796,-1.09151498112135,-2.92081875395238,-1.60205999132796],"y":[19.7,19.9,18.1,8.4,8.6],"text":["brainwt: 0.00030<br />sleep_total: 19.7<br />vore: insecti<br />genus: Eptesicus<br />conservation: lc","brainwt: 0.00025<br />sleep_total: 19.9<br />vore: insecti<br />genus: Myotis<br />conservation: NA","brainwt: 0.08100<br />sleep_total: 18.1<br />vore: insecti<br />genus: Priodontes<br />conservation: en","brainwt: 0.00120<br />sleep_total:  8.4<br />vore: insecti<br />genus: Scalopus<br />conservation: lc","brainwt: 0.02500<br />sleep_total:  8.6<br />vore: insecti<br />genus: Tachyglossus<br />conservation: NA"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"insecti","legendgroup":"insecti","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-1.80966830182971,-3.53760200210104,null,-3,-2.18045606445813,-3.85387196432176,-2.20065945054642,-2.45593195564972,-0.939302159646388,-2.30102999566398,0.12057393120585,-0.747146969020107,-0.356547323513813,-0.744727494896694,null,null,-1.69897000433602,-0.744727494896694,-2.58502665202918,-2.60205999132796],"y":[17,14.9,10,10.3,8.3,9.1,18,10.1,10.9,9.8,8,10.1,9.7,9.4,11,8.7,9.6,9.1,15.6,8.9],"text":["brainwt: 0.01550<br />sleep_total: 17.0<br />vore: omni<br />genus: Aotus<br />conservation: NA","brainwt: 0.00029<br />sleep_total: 14.9<br />vore: omni<br />genus: Blarina<br />conservation: lc","brainwt:      NA<br />sleep_total: 10.0<br />vore: omni<br />genus: Cercopithecus<br />conservation: lc","brainwt: 0.00100<br />sleep_total: 10.3<br />vore: omni<br />genus: Condylura<br />conservation: lc","brainwt: 0.00660<br />sleep_total:  8.3<br />vore: omni<br />genus: Cricetomys<br />conservation: NA","brainwt: 0.00014<br />sleep_total:  9.1<br />vore: omni<br />genus: Cryptotis<br />conservation: lc","brainwt: 0.00630<br />sleep_total: 18.0<br />vore: omni<br />genus: Didelphis<br />conservation: lc","brainwt: 0.00350<br />sleep_total: 10.1<br />vore: omni<br />genus: Erinaceus<br />conservation: lc","brainwt: 0.11500<br />sleep_total: 10.9<br />vore: omni<br />genus: Erythrocebus<br />conservation: lc","brainwt: 0.00500<br />sleep_total:  9.8<br />vore: omni<br />genus: Galago<br />conservation: NA","brainwt: 1.32000<br />sleep_total:  8.0<br />vore: omni<br />genus: Homo<br />conservation: NA","brainwt: 0.17900<br />sleep_total: 10.1<br />vore: omni<br />genus: Macaca<br />conservation: NA","brainwt: 0.44000<br />sleep_total:  9.7<br />vore: omni<br />genus: Pan<br />conservation: NA","brainwt: 0.18000<br />sleep_total:  9.4<br />vore: omni<br />genus: Papio<br />conservation: NA","brainwt:      NA<br />sleep_total: 11.0<br />vore: omni<br />genus: Perodicticus<br />conservation: lc","brainwt:      NA<br />sleep_total:  8.7<br />vore: omni<br />genus: Rhabdomys<br />conservation: NA","brainwt: 0.02000<br />sleep_total:  9.6<br />vore: omni<br />genus: Saimiri<br />conservation: NA","brainwt: 0.18000<br />sleep_total:  9.1<br />vore: omni<br />genus: Sus<br />conservation: domesticated","brainwt: 0.00260<br />sleep_total: 15.6<br />vore: omni<br />genus: Tenrec<br />conservation: NA","brainwt: 0.00250<br />sleep_total:  8.9<br />vore: omni<br />genus: Tupaia<br />conservation: NA"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"omni","legendgroup":"omni","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[null,-2.61978875828839,null,-1.94309514866353,-1.67778070526608,-2.52287874528034,-3.48148606012211],"y":[7,10.3,11.5,13.7,5.4,10.6,12.8],"text":["brainwt:      NA<br />sleep_total:  7.0<br />vore: NA<br />genus: Calomys<br />conservation: NA","brainwt: 0.00240<br />sleep_total: 10.3<br />vore: NA<br />genus: Paraechinus<br />conservation: lc","brainwt:      NA<br />sleep_total: 11.5<br />vore: NA<br />genus: Peromyscus<br />conservation: NA","brainwt: 0.01140<br />sleep_total: 13.7<br />vore: NA<br />genus: Phalanger<br />conservation: NA","brainwt: 0.02100<br />sleep_total:  5.4<br />vore: NA<br />genus: Procavia<br />conservation: lc","brainwt: 0.00300<br />sleep_total: 10.6<br />vore: NA<br />genus: Spalax<br />conservation: NA","brainwt: 0.00033<br />sleep_total: 12.8<br />vore: NA<br />genus: Suncus<br />conservation: NA"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(127,127,127,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(127,127,127,1)"}},"hoveron":"points","name":"NA","legendgroup":"NA","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":36.4398243896164,"r":10.6268161062682,"b":64.0097704253159,"l":54.1967621419676},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4.08440497247626,0.987321206922612],"tickmode":"array","ticktext":["1e-04","1e-03","1e-02","1e-01","1e+00"],"tickvals":[-4,-3,-2,-1,0],"categoryorder":"array","categoryarray":["1e-04","1e-03","1e-02","1e-01","1e+00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":5.31340805313408,"tickwidth":0.966074191478924,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.966074191478924,"zeroline":false,"anchor":"y","title":{"text":"brainwt","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1,20.8],"tickmode":"array","ticktext":["5","10","15","20"],"tickvals":[5,10,15,20],"categoryorder":"array","categoryarray":["5","10","15","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":5.31340805313408,"tickwidth":0.966074191478924,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.966074191478924,"zeroline":false,"anchor":"x","title":{"text":"sleep_total","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.74874731567645,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.0029057700291},"title":{"text":"vore","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"404347500502a":{"x":{},"y":{},"colour":{},"genus":{},"conservation":{},"type":"scatter"}},"cur_data":"404347500502a","visdat":{"404347500502a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
-### Shiny
+## Shiny
 
 For more advanced interactive visualizations (beyond the scope of this workshop), 
 have a look at [shiny](https://shiny.rstudio.com/).
 
-&lt;img src="videos/shiny-animation1.gif" width="80%" style="display: block; margin: auto;" /&gt;
+.pull-left-40[
+- [eulerr.co](https://eulerr.co) (a shameless plug of my package and Shiny
+  companion app)
+- [WHO AMR Dashboard](https://jolars.shinyapps.io/WHO-AMR-Dashboard-beta/) (another project
+  i am working on at the moment)
+- [R Studio's Shiny App Gallery](https://shiny.rstudio.com/gallery/)
+]
+
+.pull-right-60[
+&lt;img src="videos/shiny-animation1.gif" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

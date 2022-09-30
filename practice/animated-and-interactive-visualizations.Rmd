@@ -1,5 +1,5 @@
 ---
-title: "Practice: Introduction to ggplot2"
+title: "Practice: Animated and Interactive Visualizations"
 subtitle: "Data Visualization with R and ggplot2"
 author: "Johan Larsson"
 date: "`r format(Sys.time(), '%d %B %Y')`"
@@ -46,7 +46,7 @@ install.packages(c(
 ))
 ```
 
-## Renderer
+# Renderer
 
 For **gganimate** to be able to produce animated images, you need to install a
 renderer. [gifski](https://gif.ski/) is usually the best choice, but can be
@@ -69,14 +69,14 @@ install.packages("magick")
 If any of the above works without a hitch, then you're done! If not, try the 
 advanced instructions below.
 
-### Advanced Instructions for Windows
+## Advanced Instructions for Windows
 
 Try to install **imagemagick** by downloading and installing the recommended
 installation file at <https://imagemagick.org/script/download.php#windows>.
 
 After this try to run `install.packages("magick")` again.
 
-### Advanced Instructions for macOS
+## Advanced Instructions for macOS
 
 To install **gifski** on mac, first make sure you make **homebrew** installed.
 If you do not, open the macOS terminal and run 
@@ -109,7 +109,7 @@ make sure you've installed **homebrew** (as outlined above) and then run
 brew install imagemagick
 ```
 
-### Linux
+## Linux
 
 Install **gifski** is easy using snap. Simply go to <https://snapcraft.io/gifski>
 for instructions for any given distribution.
@@ -142,15 +142,24 @@ head(gapminder)
 
 The variables should be self-explanatory.
 
-Let's jump right in and create a bubble plot faceted on year (which we cut
+Let's jump right in! Create a bubble plot faceted on year (which we cut
 into groups), with population mapped to the size of the bubbles, and
 GDP per capita and life expectancy on the x and y axes respectively.
 
-```{r fig.cap = "Life Expectancy and GDP per capita from 1950 to 2010.", fig.width = 8, fig.height = 7}
+Here's some code to get started:
+
+```{r eval = FALSE}
 library(tidyverse)
 
-gapminder %>%
-  mutate(years = cut_interval(year, length = 5)) %>%
+gapminder |>
+  mutate(years = cut_interval(year, length = 5)) |>
+  ggplot(...)
+```
+
+```{r fig.cap = "Life Expectancy and GDP per capita from 1950 to 2010.", fig.width = 8, fig.height = 7, include = FALSE}
+library(tidyverse)
+gapminder |>
+  mutate(years = cut_interval(year, length = 5)) |>
   ggplot(aes(gdpPercap, lifeExp, size = pop, color = continent)) +
   geom_point(alpha = 0.5) +
   scale_size(range = c(2, 12)) +
@@ -166,29 +175,13 @@ gapminder %>%
 Just as I said in the first presentation, this visualization is not (yet) working
 out so well for us. Let's make it animated instead. For this, we'll use
 the [gganimate](https://CRAN.R-project.org/package=gganimate) package.
-First install the package.
 
-```{r, eval = FALSE}
-install.packages("gganimate")
-```
+Build the plot as before, but now make it animated by adding
+the `transition_time()` function to the plot, mapping the animation to
+`year`. Also use `title = "Year: {frame_time}"` in your `labs()` call
+to animate the label, showing which year it is.
 
-To use the **gganimate** package you also need a *renderer* to produce
-animated images. You can use either [gifski](https://gif.ski/) or
-[ImageMagick](https://imagemagick.org/). We recommend the former (and
-**gganimate** defaults to gifski if it is installed), but either
-will work just fine. Run one (or both) of the following lines to
-install a renderer.
-
-```{r, eval = FALSE}
-install.packages("gifski")
-install.packages("magick")
-```
-
-We build the plot as before, but now make it animated by adding
-the `transition_time()` function to the plot as well as use the
-title label to show the current year.
-
-```{r, fig.cap = "GDP per capita and life expectancy for some of the countries of the world.", fig.width = 7, fig.height = 6}
+```{r, fig.cap = "GDP per capita and life expectancy for some of the countries of the world.", fig.width = 7, fig.height = 6, include = FALSE}
 library(gganimate)
 
 ggplot(gapminder,  aes(gdpPercap, lifeExp, size = pop, color = continent)) +
@@ -205,10 +198,15 @@ ggplot(gapminder,  aes(gdpPercap, lifeExp, size = pop, color = continent)) +
 ```
 
 If you think the plot is still crowded, we could alternatively use
-facets to separate continents. Here we also make use of the
-`country_colors` object that is included in the **gapminder** package.
+facets to separate continents. If you want to, you can make use of the
+`country_colors` object that is included in the **gapminder** package by
+adding the following line to your plot.
 
-```{r, fig.cap = "GDP per capita and life expectancy; now with facets!", fig.width = 7, fig.height = 6}
+```r
+scale_colour_manual(values = country_colors, guide = FALSE)
+```
+
+```{r, fig.cap = "GDP per capita and life expectancy; now with facets!", fig.width = 7, fig.height = 6, include = FALSE}
 ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = country)) +
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = country_colors, guide = FALSE) +
@@ -222,6 +220,11 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = country)) +
   ) +
   transition_time(year)
 ```
+
+Try to add `ease_aes("cubic-in-out")` to the plot to change the
+transition function and see what the difference is. There are
+other options available if you check out the documentation for
+`ease_aes()` too.
 
 So far our plot does a good job of showing the trends among the various
 continents of the world but is hard to use if we are interested in one
@@ -242,10 +245,10 @@ the country names.
 
 ```{r}
 large_country_names <-
-  gapminder %>%
-  filter(year == max(year)) %>%
-  group_by(continent) %>%
-  slice_max(pop, n = 2) %>%
+  gapminder |>
+  filter(year == max(year)) |>
+  group_by(continent) |>
+  slice_max(pop, n = 2) |>
   pull(country)
 
 large_country_names
@@ -258,16 +261,16 @@ labels.
 large_countries <- filter(gapminder, country %in% large_country_names)
 ```
 
-Now we put everything together; this time we also change the
-*easing* of aesthetics from linear to cubic in-and-out using `ease_aes()`,
-to more clearly show that we actually only have data on a 5-year interval here.
-We label the countries with `geom_label_repel()` from the **ggrepel** package,
-in order to avoid overlapping labels.^[Working with labels and animated
-visualizations is something of a challenge. Here I've had to tweak the
-settings (mostly `nudge_x` and `nudge_y`) several times in order to get
-something that looks good.]
+Now it's your turn to try to put everything together. Label the countries with
+`geom_label_repel()` from the **ggrepel** package, in order to avoid
+overlapping labels. Note that working with labels and animated visualizations
+is something of a challenge. I had to tweak the settings (mostly
+`nudge_x` and `nudge_y`) several times in order to get something that looks
+good.
 
-```{r, fig.cap = "Life expectancy and GDP per capita with countries. The two largest countries at the start (in terms of population) have been labeled.", fig.width = 8, fig.height = 7}
+The final result should look something like the following figure.
+
+```{r, fig.cap = "Life expectancy and GDP per capita with countries. The two largest countries at the start (in terms of population) have been labeled.", fig.width = 8, fig.height = 7, echo = FALSE}
 library(ggrepel)
 
 ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = country)) +
@@ -318,7 +321,7 @@ mapping that will let plotly know which variable to use to separate
 the visualization into frames.
 
 ```{r, fig.cap = "An interactive visualization using plotly for the Gapminder data.", fig.width = 8, fig.height = 7}
-p <- ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, color = country)) +
+p <- ggplot(gapminder, aes(gdpPercap, lifeExp)) +
   geom_point(aes(frame = year), alpha = 0.5) +
   scale_colour_manual(values = country_colors, guide = FALSE) +
   scale_size(range = c(2, 12)) +
@@ -331,3 +334,7 @@ ggplotly(p)
 
 Notice how seamless the conversion of ggplots into interactive plots can be
 with the help of plotly.
+
+Try to modify the plot by adding additional dummy mapings in the `aes()` call
+to the main `ggplot` function to be able to obtain information
+on these variables in the tooltips too.

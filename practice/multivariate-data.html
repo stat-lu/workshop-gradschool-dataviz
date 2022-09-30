@@ -11,7 +11,7 @@
 
 <meta name="author" content="Johan Larsson" />
 
-<meta name="date" content="2022-09-29" />
+<meta name="date" content="2022-09-30" />
 
 <title>Practice: Multivariate Data</title>
 
@@ -337,7 +337,7 @@ div.tocify {
 <h1 class="title toc-ignore">Practice: Multivariate Data</h1>
 <h3 class="subtitle">Data Visualization with R and ggplot2</h3>
 <h4 class="author">Johan Larsson</h4>
-<h4 class="date">29 september 2022</h4>
+<h4 class="date">30 september 2022</h4>
 
 </div>
 
@@ -372,7 +372,7 @@ but the <code>geom_text_repel()</code> function from <strong>ggrepel</strong> au
 overlap in the plot, which is often very useful.</em></p>
 </div>
 <div id="adding-labels-only-to-some-observations" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Adding Labels only to Some Observations</h1>
+<h1><span class="header-section-number">3</span> Adding Labels Only to Some Observations</h1>
 <p>The plot nicely connects names to the points but is kind of messy. For data sets
 where this happens, it might be worthwhile to consider whether it’s possible to
 reduce the amount of clutter by applying text labels only to some observations.</p>
@@ -383,25 +383,21 @@ sex and slice the data set so that only the observations with the highest mass
 in each group remain, then we <code>pull()</code> the <code>name</code> variable and store it in
 <code>high_mass</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>high_mass <span class="ot">&lt;-</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.max</span>(mass)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">which.max</span>(mass)) <span class="sc">|&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(name)</span></code></pre></div>
 <p>Next, we <code>mutate()</code> the data set by adding a new variable <code>highlight</code> that gives
 the name of the observation if it corresponds to one of the observations in
 <code>high_mass</code> and otherwise <code>&quot;&quot;</code>, which results in no label.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>starwars2 <span class="ot">&lt;-</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">highlight =</span> <span class="fu">ifelse</span>(name <span class="sc">%in%</span> high_mass, name, <span class="st">&quot;&quot;</span>))</span></code></pre></div>
 <p>Now we are ready to plot. Use the new <code>highlight</code> column as your <code>label</code>
 mapping, but keep the plot the same otherwise.</p>
-<p>Which character has the largest mass in the <code>NA</code> group?</p>
-<ul>
-<li>Sly Moore [correct]</li>
-<li>Grievous</li>
-<li>IG-88</li>
-<li>Beru Whitesun lars</li>
-</ul>
+<p>As a bonus exercise, try to filter out the observations in <code>high_mass</code>
+from the original data set and use separate <code>geom_point()</code> layers
+for the two data sets, using different aesthetics for the two.</p>
 </div>
 <div id="faceting" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Faceting</h1>
@@ -415,9 +411,7 @@ data set wherein each character may occur more than once.</p>
 <p>Now create a new scatter plot, again with mass against height on the x and y
 axes, but with facets corresponding to <code>gender</code> (note: not sex) and <code>films</code>.
 Keep the scale transformation you used previously (logarithmic). You can also
-keep the labels you used in your previous plot or, if you want a bonus task,
-create new labels using the method above to highlight the heaviest character for
-each film and gender.</p>
+keep the labels you used in your previous plot.</p>
 <p>Note that you can use both <code>facet_wrap()</code> and <code>facet_grid()</code> here. Try out both
 and compare the results.</p>
 </div>
@@ -442,41 +436,36 @@ compute the right answers and see if you were correct.</p>
 set indicating whether the province is mostly Catholic or mostly protestant and
 then color the bubbles in your plot based on this variable.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>swiss3 <span class="ot">&lt;-</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  swiss2 <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  swiss2 <span class="sc">|&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Religion =</span> <span class="fu">ifelse</span>(Catholic <span class="sc">&gt;=</span> <span class="dv">50</span>, <span class="st">&quot;Catholic&quot;</span>, <span class="st">&quot;Protestant&quot;</span>))</span></code></pre></div>
-<p>Which catholic province has the lowest proportion of workers working in
-agriculture?</p>
-<ul>
-<li>Rive Gauche</li>
-</ul>
+<p>Can you figure out which catholic province has the lowest proportion of workers
+working in agriculture?</p>
 <div id="bonus-ternary-plots" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Bonus: Ternary Plots</h2>
 <p>Ternary plots can be used to visualize three variables in two-dimensional
 display and are useful for compositional data when three features (variables)
 sum to a constant, typically 1 (100%). They are common when studying geological
 features, such as samples of rocks, when each sample is comprised of three
-different types of minerals, for example.</p>
-<p>To plot ternary plots with ggplot2, load the <strong>ggtern</strong> package, which you
+different types of minerals, for example.
+To plot ternary plots with ggplot2, load the <strong>ggtern</strong> package, which you
 should have installed by now.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtern)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.package(&quot;ggtern&quot;)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtern)</span></code></pre></div>
 <p>The package comes with a few data sets to showcase ternary plots and we’ll use
 the <code>Feldspar</code> data set here. Load it by calling <code>data(Feldspar)</code>. Now, to
 construct a ternary plot, use the <code>ggtern()</code> function instead of <code>ggplot()</code>. It
 is a wrapper to the latter, which provides a coordinate transformation that is
 necessary to get reasonable results.</p>
 <p>Then, to produce the plot, map <code>An</code> to the x axis, <code>Ab</code> to the y axis, and <code>Or</code>
-to the z axis. Also map color to the feldspar variety (<code>Feldspar</code>).</p>
+to the z axis.</p>
 <p>The resulting plot shows, for each sample of feldspar, its composition in terms
 of the three constituents <code>Ab</code>, <code>Or</code>, and <code>An</code>, which represents chemical
-compounds. To read the individual values for any point, you read the chart along
-the diagonal or horizontal grid lines. Note also that the labels for the
-components are positioned such that a observation close to it indicates that it
-contains a lot of that component.</p>
-<p>What is (roughly) the highest value of <code>Or</code> that any Feldspar in the group
-“Plagioclase” takes? (A margin of +- 5 is tolerated).</p>
-<ul>
-<li>20 (+- 5)</li>
-</ul>
+compounds. To read the individual values for any point, you read the chart
+along the diagonal or horizontal grid lines (see fore information about this at
+<a href="https://en.wikipedia.org/wiki/Ternary_plot">this Wikipedia page</a>.</p>
+<p><strong>ggtern</strong> works exactly like other ggplots, so you can add and modify layers
+in exactly the same fashion. There is a categorical variable called
+<code>Feldspar</code> in the data. Try to map it to color, shape or create facets from it.</p>
 </div>
 </div>
 

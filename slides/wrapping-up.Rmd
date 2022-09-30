@@ -1,0 +1,181 @@
+---
+title: "Wrapping Up"
+subtitle: "Data Visualization with R and ggplot2"
+author: "Johan Larsson (Department of Statistics)"
+institute: "Graduate School at the Faculty of Social Sciences"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  xaringan::moon_reader:
+    css: [default, "assets/styles.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      titleSlideClass: [middle, center]
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE,
+  dev = "png",
+  fig.width = 5,
+  fig.height = 4,
+  fig.align = "center",
+  fig.retina = 3,
+  dev.args = list(pointsize = 16),
+  crop = TRUE
+)
+
+library(tidyverse)
+library(kableExtra)
+library(here)
+library(RefManageR)
+
+kable <- function(x, ...) {
+  knitr::kable(x, escape = FALSE, linesep = "", booktabs = TRUE)
+}
+
+BibOptions(
+  check.entries = FALSE,
+  bib.style = "authoryear",
+  style = "markdown",
+  dashed = TRUE
+)
+
+bib <- ReadBib("assets/references.bib")
+
+theme_set(theme_grey())
+
+if (!interactive()) {
+  theme_set(theme_grey(base_size = 15))
+}
+
+options(digits = 3)
+```
+
+## Congratulations!
+
+You have already learned quite a bit!
+
+.pull-left[
+- Visualizing distributions
+- Plotting associations
+- Using aesthetics and facets to plot multivariate relationships
+- Animating visualizations
+- Turning your visualizations interactive
+]
+
+.pull-right[
+```{r, out.width = "90%", echo = FALSE}
+knitr::include_graphics("images/balloons.jpg")
+```
+]
+
+---
+
+class: section-title
+
+# Where to Go Next
+
+---
+
+## Courses
+
+### STAE04: Data Visualization
+
+Another shameless plug: take my course, [STAE04: Data
+Visualisation](https://stat.lu.se/en/education/courses/stae04_data_visualisation)!
+
+Distance course, 4 ECTS
+
+### Datacamp
+
+[Datacamp](https://datacamp.com) has a data visualization track (but only
+the very first part is free!)
+
+### MOOCs
+
+I don't know anything about these, but they are free!
+
+- [Data Visualization with R at Coursera](https://www.coursera.org/learn/data-visualization-r)
+- [Visualizing Data with R at edX](https://www.edx.org/course/visualizing-data-with-r)
+
+---
+
+## Books
+
+.pull-left-70[
+### [Data Visualization: A practical introduction](https://socviz.co) by Kieran Healy
+
+Great next step. Also based on ggplot2 and provides code in book.
+
+### [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/) by Claus O. Wilke
+
+More comprehensive and more general.
+
+### Other
+
+- The [ggplot2 book](https://ggplot2-book.org/)
+- The Visual Display of Quantitative Information by `r Citet(bib, "tufte2001")`.
+]
+
+.pull-right-30[
+```{r, out.width = "180", echo = FALSE, fig.align = "center", out.extra ="style='border:1px solid black;'"}
+knitr::include_graphics("images/healy-book.jpg")
+```
+</br>
+
+```{r, out.width = "180", echo = FALSE, fig.align = "center", out.extra ="style='border:1px solid black;'"}
+knitr::include_graphics("images/wilke-book.png")
+```
+]
+
+---
+
+## Data Wrangling
+
+.pull-left-70[
+Datasets in the wild are seldom as well-organized! 
+
+Llearn about wrangling with data using the Tidyverse in [R for Data
+Science](https://r4ds.had.co.nz/) (also free online!)
+]
+
+.pull-right-30[
+```{r, out.width = "180", echo = FALSE, fig.align = "center", out.extra ="style='border:1px solid black;'"}
+knitr::include_graphics("images/r4ds.png")
+```
+]
+
+## ggplot2 Extensions
+
+Check out the [many (117!) extensions to
+ggplot2](https://exts.ggplot2.tidyverse.org/).
+
+---
+
+## Evaluation
+
+**Please** fill out the evaluation!
+
+Your feedback helps me to develop and improve this workshop for future
+participants.
+
+<br><br><br><br>
+```{r, echo = FALSE, fig.align = "right", out.width = "65%"}
+knitr::include_graphics("images/survey.jpg")
+```
+
+---
+
+## References
+
+```{r, results = "asis", echo=FALSE}
+PrintBibliography(bib)
+```

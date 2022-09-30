@@ -103,7 +103,7 @@ choice of bin widths is critical
 
 .pull-left[
 ```{r, fig.cap = "Too narrow bin width. (This is actually equivalent to a bar plot.)", fig.height = 3}
-faithful %>%
+faithful |>
   ggplot(aes(waiting)) +
   geom_histogram(binwidth = 1) #<<
 ```
@@ -111,7 +111,7 @@ faithful %>%
 
 .pull-right[
 ```{r, fig.cap = "Reasonable bin width", fig.height = 3}
-faithful %>%
+faithful |>
   ggplot(aes(waiting)) +
   geom_histogram(binwidth = 3) #<<
 ```
@@ -137,7 +137,7 @@ but not suitable for data with multiple modes
 
 .pull-right[
 ```{r, fig.height = 2.5, fig.cap = "Box plot of the Old Faithful data, which fails completely in accurately describing the distribution."}
-faithful %>%
+faithful |>
   ggplot(aes(waiting)) +
     geom_boxplot() #<<
 ```
@@ -153,7 +153,7 @@ but sensitive to settings (type of kernel, bandwidth)
 
 .pull-left[
 ```{r, fig.height = 3}
-faithful %>%
+faithful |>
   ggplot(aes(waiting)) +
     geom_density(bw = 5) #<<
 ```
@@ -161,7 +161,7 @@ faithful %>%
 
 .pull-right[
 ```{r, fig.height = 3}
-faithful %>%
+faithful |>
   ggplot(aes(waiting)) +
     geom_density(bw = 10) #<<
 ```
@@ -250,7 +250,7 @@ a type of density plot, often as an alternative to box plots when you have
 lots of (continuous) data
 
 ```{r, fig.height = 3, fig.width = 6.5, fig.cap = "geom_violin() does not work with a single variable, so we use the trick y = 1 here."}
-faithful %>%
+faithful |>
   ggplot(aes(waiting, y = 1)) +
     geom_violin() #<<
 ```
@@ -262,7 +262,7 @@ faithful %>%
 with ggplot, it's easy to combine layers
 
 ```{r, fig.height = 3, fig.width = 6.5, fig.cap = "A combined box and violin plot"}
-faithful %>%
+faithful |>
   ggplot(aes(waiting, y = 1)) +
     geom_violin() +
     geom_boxplot(width = 0.1, fill = "slategray2")

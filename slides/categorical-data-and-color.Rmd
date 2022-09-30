@@ -232,7 +232,7 @@ happiness |>
 
 ## Ordering
 
-If variable is ordinal: just format it as an ordered factor
+If variable is ordinal, just format it as an ordered factor
 
 If variable is **not** ordinal: consider ordering it manually!
 
@@ -414,7 +414,7 @@ Colors should be as distinct as possible and not signal differences in magnitude
 
 **examples:** political party affiliation, gender
 
-```{r, fig.width = 8, fig.height = 4}
+```{r, fig.width = 6, fig.height = 3.5}
 ggplot(msleep, aes(bodywt, sleep_total, color = vore)) +
   geom_point() +
   scale_x_log10() +

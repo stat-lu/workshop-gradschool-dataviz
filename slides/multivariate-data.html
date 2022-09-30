@@ -96,7 +96,7 @@ Color is often a good choice, especially with categorical variables.
 
 
 ```r
-mtcars &lt;- rownames_to_column(mtcars, "name") %&gt;%
+mtcars &lt;- rownames_to_column(mtcars, "name") |&gt;
   mutate_at(vars(cyl, gear), as.factor)
 
 *ggplot(mtcars, aes(disp, hp, color = cyl)) +
@@ -244,7 +244,7 @@ to text (`geom_text_repel()`)
 ```r
 library(ggrepel)
 
-head(msleep, 15) %&gt;%
+head(msleep, 15) |&gt;
   ggplot(aes(brainwt, 
              sleep_total, 
              label = name)) +
@@ -316,8 +316,8 @@ variable into an ordinal one.
 
 
 ```r
-mtcars %&gt;%
-* mutate(hp_cat = cut_interval(hp, 3)) %&gt;%
+mtcars |&gt;
+* mutate(hp_cat = cut_interval(hp, 3)) |&gt;
   ggplot(aes(mpg, disp)) +
     geom_point() +
     facet_wrap(vars(hp_cat), labeller = "label_both")
@@ -334,7 +334,7 @@ visualizations.
 
 
 ```r
-tail(mtcars, 15) %&gt;%
+tail(mtcars, 15) |&gt;
   ggplot(aes(hp, wt, color = cyl, label = name)) +
     geom_point() +
     geom_text_repel() +

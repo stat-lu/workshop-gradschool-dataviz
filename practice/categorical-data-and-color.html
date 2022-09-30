@@ -361,8 +361,8 @@ like.</p>
 <p>Well, it’s not very neatly formatted. Tidy it up by calling the following code
 in which we rename and re-code some of the variables.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>titanic <span class="ot">&lt;-</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(titanic_train) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PassengerId, <span class="at">Class =</span> Pclass, Sex, Age, Survived) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(titanic_train) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PassengerId, <span class="at">Class =</span> Pclass, Sex, Age, Survived) <span class="sc">|&gt;</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">as_factor</span>(<span class="fu">ifelse</span>(Age <span class="sc">&lt;</span> <span class="dv">18</span>, <span class="st">&quot;Chid&quot;</span>, <span class="st">&quot;Adult&quot;</span>)),</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Survived =</span> <span class="fu">as_factor</span>(<span class="fu">ifelse</span>(Survived, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>

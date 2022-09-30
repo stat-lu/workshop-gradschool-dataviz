@@ -45,19 +45,16 @@ if (!interactive()) {
   theme_set(theme_grey(base_size = 16))
 }
 
-xaringanExtra::use_search(show_icon = TRUE)
-
 options(digits = 3)
 ```
 
 ## Animated Visualizations
 
-offers an extra aesthetic that we can map
-variables to
+Offers an extra aesthetic that we can map variables to
 
-very useful in **presentations**
+Very useful for **presentations** and **webpages**!
 
-Animating works best when mapping to time or similar process.
+Animating works best when mapping to time (or similar process).
 
 --
 
@@ -67,17 +64,15 @@ Animating works best when mapping to time or similar process.
 [gganimate](https://gganimate.com/) is a ggplot-based solution for producing
 animations in R.
 
-You may need to download and install a
-**renderer**; we recommend [gifski](https://gif.ski/).
+You may need to download and install a **renderer**; I recommend
+[gifski](https://gif.ski/).
 ]
 
 .pull-right-40[
 ```{r echo = FALSE, out.width = "50%"}
 knitr::include_graphics("images/gganimate.svg")
 ```
-
 ]
-
 
 ---
 
@@ -87,8 +82,8 @@ Start with some data.
 
 ```{r}
 # aggregate over years
-tx <- select(txhousing, city, year, sales:inventory) %>%
-  group_by(city, year) %>%
+tx <- select(txhousing, city, year, sales:inventory) |>
+  group_by(city, year) |>
   summarize_all(mean, na.rm = TRUE)
 ```
 
@@ -96,10 +91,12 @@ tx <- select(txhousing, city, year, sales:inventory) %>%
 Then build a basic ggplot.
 
 ```{r houston, eval = FALSE}
-p <- tx %>%
-  ggplot(aes(median, 
-             listings)) +
-    geom_point(alpha = 0.5)
+p <- tx |>
+  ggplot(aes(
+    median,
+    listings
+  )) +
+  geom_point(alpha = 0.5)
 p
 ```
 ]
@@ -108,7 +105,6 @@ p
 ```{r ref.label = "houston", echo = FALSE, out.width = "100%", fig.cap = "Median sales price and numbers of listings."}
 ```
 ]
-
 
 ---
 
@@ -120,7 +116,7 @@ Calling the object invokes the `animate()` function,
 which does all the heavy-lifting.
 
 .pull-left[
-```{r anim1, eval = FALSE}
+```{r anim1, eval = FALSE, fig.retina=1}
 library(gganimate)
 
 anim <- p +
@@ -132,7 +128,7 @@ anim # same as animate(anim)
 ]
 
 .pull-right[
-```{r ref.label = "anim1", echo = FALSE, out.width = "100%"}
+```{r ref.label = "anim1", echo = FALSE, fig.retina=1, dpi=144}
 ```
 ]
 
@@ -141,9 +137,9 @@ anim # same as animate(anim)
 
 ### Labeling
 
-uses special **glue** syntax inside `labs()`
+Use the special **glue** syntax inside `labs()` to add animated labels.
 
-```{r, out.width = "60%"}
+```{r fig.retina = 1, out.width = "50%"}
 anim2 <- anim +
   labs(title = "Year: {frame_time}") #<<
 anim2
@@ -156,28 +152,40 @@ anim2
 
 Use `animate()` directly for more control over the animation.
 
-```{r, out.width = "60%"}
+```{r fig.retina = 1, eval = FALSE}
 animate(anim2, duration = 20, nframes = 150) #<<
+```
+
+```{r fig.retina = 1, echo = FALSE, out.width="50%"}
+animate(
+  anim2,
+  duration = 20,
+  nframes = 150,
+  res = 144,
+  width = 4.8,
+  height = 4.1,
+  units = "in"
+)
 ```
 
 ---
 
 ## Interactive Visualizations
 
-great for most datasets, particularly complicated datasets, but can
+Great for most datasets, particularly complicated datasets, but can
 only really be used on webpages
 
-often useful in tandem with carefully designed static visualizations
+Often useful in tandem with carefully designed static visualizations
 
 .pull-left[
 ### plotly
 
 Simple interactive visualizations can be achieved easily using [plotly](https://plotly.com/).
 
-two alternatives: 
+Two alternatives: 
 
-- call `plot_ly()` directly
-- use `ggplotly()` on a plot built in ggplot2
+- Call `plot_ly()` directly
+- Use `ggplotly()` on a plot built in ggplot2
 
 We focus on the second alternative.
 ]
@@ -190,28 +198,38 @@ knitr::include_graphics("images/plotly.png")
 
 ---
 
-```{r, fig.width = 8, fig.height = 5, eval = FALSE}
+```{r, fig.width = 10, fig.height = 5.2, eval = TRUE}
 library(plotly)
-p <- ggplot(msleep, aes(brainwt, sleep_total, color = vore, 
-                        genus = genus, 
-                        conservation = conservation)) +
+p <- ggplot(msleep, aes(brainwt, sleep_total,
+  color = vore,
+  genus = genus,
+  conservation = conservation
+)) +
   geom_point() +
   scale_x_log10()
 ggplotly(p) #<<
 ```
 
-```{r, echo = FALSE, out.width = "83%"}
-knitr::include_graphics("videos/plotly-animation1.gif")
-```
-
 ---
 
-### Shiny
+## Shiny
 
 For more advanced interactive visualizations (beyond the scope of this workshop), 
 have a look at [shiny](https://shiny.rstudio.com/).
 
-```{r, echo = FALSE, out.width = "80%"}
+.pull-left-40[
+- [eulerr.co](https://eulerr.co) (a shameless plug of my package and Shiny
+  companion app)
+- [WHO AMR Dashboard](https://jolars.shinyapps.io/WHO-AMR-Dashboard-beta/) (another project
+  i am working on at the moment)
+- [R Studio's Shiny App Gallery](https://shiny.rstudio.com/gallery/)
+]
+
+.pull-right-60[
+```{r, echo = FALSE, out.width = "100%"}
 knitr::include_graphics("videos/shiny-animation1.gif")
 ```
+]
+
+
 

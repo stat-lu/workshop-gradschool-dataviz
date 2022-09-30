@@ -95,9 +95,9 @@ in each group remain, then we `pull()` the `name` variable and store it in
 
 ```{r}
 high_mass <-
-  starwars %>%
-  group_by(sex) %>%
-  slice(which.max(mass)) %>%
+  starwars |>
+  group_by(sex) |>
+  slice(which.max(mass)) |>
   pull(name)
 ```
 
@@ -107,7 +107,7 @@ the name of the observation if it corresponds to one of the observations in
 
 ```{r}
 starwars2 <-
-  starwars %>%
+  starwars |>
   mutate(highlight = ifelse(name %in% high_mass, name, ""))
 ```
 
@@ -189,7 +189,7 @@ then color the bubbles in your plot based on this variable.
 
 ```{r}
 swiss3 <-
-  swiss2 %>%
+  swiss2 |>
   mutate(Religion = ifelse(Catholic >= 50, "Catholic", "Protestant"))
 ```
 

@@ -117,7 +117,7 @@ First, however, we compute the number of observations, taking care to drop
 missing values. 
 
 ```{r}
-n <- drop_na(penguins, body_mass_g) %>%
+n <- drop_na(penguins, body_mass_g) |>
   nrow()
 ```
 

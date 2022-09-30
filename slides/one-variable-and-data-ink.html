@@ -4,7 +4,7 @@
     <title>One Variable and Data-Ink</title>
     <meta charset="utf-8" />
     <meta name="author" content="Johan Larsson (Department of Statistics)" />
-    <meta name="date" content="2022-09-29" />
+    <meta name="date" content="2022-09-30" />
     <script src="libs/header-attrs-2.16/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="assets/styles.css" type="text/css" />
@@ -26,7 +26,7 @@ class: middle, center, title-slide
 ### Graduate School at the Faculty of Social Sciences
 ]
 .date[
-### 29 september 2022
+### 30 september 2022
 ]
 
 ---
@@ -86,7 +86,7 @@ choice of bin widths is critical
 .pull-left[
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting)) +
 * geom_histogram(binwidth = 1)
 ```
@@ -100,7 +100,7 @@ faithful %&gt;%
 .pull-right[
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting)) +
 * geom_histogram(binwidth = 3)
 ```
@@ -132,7 +132,7 @@ but not suitable for data with multiple modes
 .pull-right[
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting)) +
 *   geom_boxplot()
 ```
@@ -154,7 +154,7 @@ but sensitive to settings (type of kernel, bandwidth)
 .pull-left[
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting)) +
 *   geom_density(bw = 5)
 ```
@@ -165,7 +165,7 @@ faithful %&gt;%
 .pull-right[
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting)) +
 *   geom_density(bw = 10)
 ```
@@ -220,7 +220,7 @@ lots of (continuous) data
 
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting, y = 1)) +
 *   geom_violin()
 ```
@@ -238,7 +238,7 @@ with ggplot, it's easy to combine layers
 
 
 ```r
-faithful %&gt;%
+faithful |&gt;
   ggplot(aes(waiting, y = 1)) +
     geom_violin() +
     geom_boxplot(width = 0.1, fill = "slategray2")
