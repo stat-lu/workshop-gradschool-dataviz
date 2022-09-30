@@ -205,7 +205,7 @@ ggplot(
 Can you figure out which catholic province has the lowest proportion of workers
 working in agriculture?
 
-## Bonus: Ternary Plots
+# Bonus: Ternary Plots
 
 Ternary plots can be used to visualize three variables in two-dimensional
 display and are useful for compositional data when three features (variables)

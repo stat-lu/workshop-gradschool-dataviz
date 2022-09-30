@@ -139,7 +139,7 @@ ggplot(titanic_props, aes(Class, prop, fill = Survived)) +
 
 What do you think about this plot compared to the earlier ones? 
 
-## Mosaic Plots
+# Bonus: Mosaic Plots
 
 If you have time over, visit the webpage for
 [ggmosaic](https://haleyjeppson.github.io/ggmosaic/), which is an addon to

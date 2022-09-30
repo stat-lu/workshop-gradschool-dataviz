@@ -440,8 +440,9 @@ then color the bubbles in your plot based on this variable.</p>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Religion =</span> <span class="fu">ifelse</span>(Catholic <span class="sc">&gt;=</span> <span class="dv">50</span>, <span class="st">&quot;Catholic&quot;</span>, <span class="st">&quot;Protestant&quot;</span>))</span></code></pre></div>
 <p>Can you figure out which catholic province has the lowest proportion of workers
 working in agriculture?</p>
-<div id="bonus-ternary-plots" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> Bonus: Ternary Plots</h2>
+</div>
+<div id="bonus-ternary-plots" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Bonus: Ternary Plots</h1>
 <p>Ternary plots can be used to visualize three variables in two-dimensional
 display and are useful for compositional data when three features (variables)
 sum to a constant, typically 1 (100%). They are common when studying geological
@@ -466,7 +467,6 @@ along the diagonal or horizontal grid lines (see fore information about this at
 <p><strong>ggtern</strong> works exactly like other ggplots, so you can add and modify layers
 in exactly the same fashion. There is a categorical variable called
 <code>Feldspar</code> in the data. Try to map it to color, shape or create facets from it.</p>
-</div>
 </div>
 
 
