@@ -67,8 +67,10 @@ You have already learned quite a bit!
 - Visualizing distributions
 - Plotting associations
 - Using aesthetics and facets to plot multivariate relationships
+- Using color with accessibility in mind
 - Animating visualizations
 - Turning your visualizations interactive
+- Handling and thinking critically about scales
 ]
 
 .pull-right[
