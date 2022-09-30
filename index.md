@@ -37,13 +37,13 @@ how to download and install these.
 
 #### Multivariate Data
 
-- [Slides](slides/categorical-data-and-color)
-- [Practice](practice/categorical-data-and-color)
+- [Slides](slides/multivariate-data)
+- [Practice](practice/multivariate-data)
 
 #### Animated and Interactive Visualizations
 
-- [Slides](slides/categorical-data-and-color)
-- [Practice](practice/categorical-data-and-color)
+- [Slides](slides/animated-and-interactive-visualizations)
+- [Practice](practice/animated-and-interactive-visualizations)
 
 #### Explore a Dataset
 
